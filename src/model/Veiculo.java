@@ -7,10 +7,6 @@ public abstract class Veiculo {
 	protected Integer ano;
 	protected StatusVeiculo status;
 	
-	public Veiculo() {
-		
-	}
-	
 	public Veiculo(String placa, String modelo, Integer ano, StatusVeiculo status) {
 		this.placa = placa;
 		this.modelo = modelo;
@@ -34,5 +30,9 @@ public abstract class Veiculo {
 		return status;
 	}
 	
-	public abstract double calcularCustoLocacao();
+	public void setStatus(StatusVeiculo status) {
+		this.status = status;
+	}
+	
+	public abstract double calcularCustoLocacaoDiario();
 }
