@@ -7,6 +7,10 @@ public abstract class Veiculo {
 	protected Integer ano;
 	protected StatusVeiculo status;
 	
+	public Veiculo() {
+		
+	}
+	
 	public Veiculo(String placa, String modelo, Integer ano, StatusVeiculo status) {
 		this.placa = placa;
 		this.modelo = modelo;
@@ -28,6 +32,18 @@ public abstract class Veiculo {
 	
 	public StatusVeiculo getStatus() {
 		return status;
+	}
+	
+	public void setPlaca(String placa) {
+		this.placa = placa;
+	}
+	
+	public void setModelo(String modelo) {
+		this.modelo = modelo;
+	}
+	
+	public void setAno(Integer ano) {
+		this.ano = ano;
 	}
 	
 	public void setStatus(StatusVeiculo status) {

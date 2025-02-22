@@ -6,6 +6,10 @@ import java.time.temporal.ChronoUnit;
 public class Pagamento {
 	
 	private Locacao locacao;
+	
+	public Pagamento() {
+		
+	}
 
 	public Pagamento(Locacao locacao) {
 		this.locacao = locacao;
@@ -13,6 +17,10 @@ public class Pagamento {
 	
 	public Locacao getLocacao() {
 		return locacao;
+	}
+	
+	public void setLocacao(Locacao locacao) {
+		this.locacao = locacao;
 	}
 	
 	public double calcularMulta() {

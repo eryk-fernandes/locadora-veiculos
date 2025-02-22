@@ -7,6 +7,10 @@ public class Cliente {
 	private String telefone;
 	private String email;
 	
+	public Cliente() {
+		
+	}
+	
 	public Cliente(String nome, String cpf, String telefone, String email) {
 		this.nome = nome;
 		this.cpf = cpf;
@@ -32,6 +36,10 @@ public class Cliente {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public void setTelefone(String telefone) {
