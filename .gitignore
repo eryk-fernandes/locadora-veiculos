@@ -64,3 +64,4 @@ local.properties
 .apt_generated_test/
 
 .settings
+/target/
