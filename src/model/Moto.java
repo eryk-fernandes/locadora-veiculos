@@ -1,9 +1,13 @@
 package model;
 
 public class Moto extends Veiculo {
+	
+	public Moto() {
+		
+	}
 
-	public Moto(String placa, String modelo, Integer ano, StatusVeiculo status) {
-		super(placa, modelo, ano, status);
+	public Moto(Integer id, String placa, String modelo, Integer ano, StatusLocacao status) {
+		super(id, placa, modelo, ano, status);
 	}
 
 	@Override

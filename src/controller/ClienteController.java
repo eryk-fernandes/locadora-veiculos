@@ -10,6 +10,10 @@ public class ClienteController {
 		this.cliente = cliente;
 	}
 	
+	public Integer getClienteId() {
+		return cliente.getId();
+	}
+	
 	public String getClienteNome() {
 		return cliente.getNome();
 	}
@@ -24,6 +28,10 @@ public class ClienteController {
 
 	public String getClienteEmail() {
 		return cliente.getEmail();
+	}
+	
+	public void setClienteId(Integer id) {
+		cliente.setId(id);
 	}
 	
 	public void setClienteNome(String nome) {

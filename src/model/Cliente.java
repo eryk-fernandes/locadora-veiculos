@@ -2,6 +2,7 @@ package model;
 
 public class Cliente {
 
+	private Integer id;
 	private String nome;
 	private String cpf;
 	private String telefone;
@@ -18,6 +19,10 @@ public class Cliente {
 		this.email = email;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
 	public String getNome() {
 		return nome;
 	}
@@ -32,6 +37,10 @@ public class Cliente {
 
 	public String getEmail() {
 		return email;
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public void setNome(String nome) {

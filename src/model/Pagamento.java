@@ -1,46 +1,63 @@
 package model;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 public class Pagamento {
 	
-	private Locacao locacao;
+	private Integer id;
+	private Integer idLocacao;
+	private Double valorPago;
+	private LocalDate dataPagamento;
+	private MetodoPagamento metodoPagamento;
 	
 	public Pagamento() {
 		
 	}
 
-	public Pagamento(Locacao locacao) {
-		this.locacao = locacao;
+	public Pagamento(Integer id, Integer idLocacao, MetodoPagamento metodoPagamento) {
+		this.id = id;
+		this.idLocacao = idLocacao;
+		this.metodoPagamento = metodoPagamento;
 	}
 	
-	public Locacao getLocacao() {
-		return locacao;
+	public Integer getId() {
+		return id;
 	}
 	
-	public void setLocacao(Locacao locacao) {
-		this.locacao = locacao;
+	public Integer getIdLocacao() {
+		return idLocacao;
 	}
 	
-	public double calcularMulta() {
-		
-		LocalDate devolucao = locacao.getDevolucao();
-		long diasAtraso = ChronoUnit.DAYS.between(devolucao, LocalDate.now());
-		
-		if (diasAtraso > 0) {
-			return diasAtraso * locacao.getVeiculo().calcularCustoLocacaoDiario() * 0.1;
-		}
-		
-		return 0.0;
+	public Double getValorPago() {
+		return valorPago;
 	}
 	
-	public double calcularValorTotal() {
-		LocalDate retirada = locacao.getRetirada();
-		
-		long dias = ChronoUnit.DAYS.between(retirada, LocalDate.now());
-		double custoLocacaoDiario = locacao.getVeiculo().calcularCustoLocacaoDiario();
-		
-		return custoLocacaoDiario * dias + calcularMulta();
+	public LocalDate getDataPagamento() {
+		return dataPagamento;
 	}
+	
+	public MetodoPagamento getMetodoPagamento() {
+		return metodoPagamento;
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
+	public void setIdLocacao(Integer idLocacao) {
+		this.idLocacao = idLocacao;
+	}
+	
+	public void setValorPago(Double valorPago) {
+		this.valorPago = valorPago;
+	}
+	
+	public void setDataPagamento(LocalDate dataPagamento) {
+		this.dataPagamento = dataPagamento;
+	}
+	
+	public void setMetodoPagamento(MetodoPagamento metodoPagamento) {
+		this.metodoPagamento = metodoPagamento;
+	}
+
 }

@@ -1,6 +1,8 @@
 package controller;
 
-import model.Locacao;
+import java.time.LocalDate;
+
+import model.MetodoPagamento;
 import model.Pagamento;
 
 public class PagamentoController {
@@ -11,12 +13,44 @@ public class PagamentoController {
 		this.pagamento = pagamento;
 	}
 	
-	public Locacao getPagamentoLocacao() {
-		return pagamento.getLocacao();
+	public Integer getPagamentoId() {
+		return pagamento.getId();
 	}
 	
-	public void setPagamentoLocacao(Locacao locacao) {
-		pagamento.setLocacao(locacao);
+	public Integer getPagamentoIdLocacao() {
+		return pagamento.getIdLocacao();
+	}
+	
+	public Double getPagamentoValorPago() {
+		return pagamento.getValorPago();
+	}
+	
+	public LocalDate getPagamentoDataPagamento() {
+		return pagamento.getDataPagamento();
+	}
+	
+	public MetodoPagamento getPagamentoMetodoPagamento() {
+		return pagamento.getMetodoPagamento();
+	}
+	
+	public void setPagamentoId(Integer id) {
+		pagamento.setId(id);
+	}
+	
+	public void setPagamentoIdLocacao(Integer idLocacao) {
+		pagamento.setIdLocacao(idLocacao);
+	}
+	
+	public void setPagamentoValorPago(Double valorPago) {
+		pagamento.setValorPago(valorPago);
+	}
+	
+	public void setPagamentoDataPagamento(LocalDate dataPagamento) {
+		pagamento.setDataPagamento(dataPagamento);
+	}
+	
+	public void setPagamentoMetodoPagamento(MetodoPagamento metodoPagamento) {
+		pagamento.setMetodoPagamento(metodoPagamento);
 	}
 
 }

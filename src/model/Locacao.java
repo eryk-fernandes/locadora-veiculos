@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public class Locacao {
 	
+	protected Integer id;
 	private Cliente cliente;
 	private Veiculo veiculo;
 	private LocalDate retirada;
@@ -13,11 +14,20 @@ public class Locacao {
 		
 	}
 
-	public Locacao(Cliente cliente, Veiculo veiculo, LocalDate retirada, LocalDate devolucao) {
+	public Locacao(Integer id, Cliente cliente, Veiculo veiculo, LocalDate retirada, LocalDate devolucao) {
+		this.id = id;
 		this.cliente = cliente;
 		this.veiculo = veiculo;
 		this.retirada = retirada;
 		this.devolucao = devolucao;
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public Cliente getCliente() {

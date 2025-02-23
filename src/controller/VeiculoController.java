@@ -1,6 +1,6 @@
 package controller;
 
-import model.StatusVeiculo;
+import model.StatusLocacao;
 import model.Veiculo;
 
 public class VeiculoController {
@@ -9,6 +9,10 @@ public class VeiculoController {
 
 	public VeiculoController(Veiculo veiculo) {
 		this.veiculo = veiculo;
+	}
+	
+	public Integer getVeiculoId() {
+		return veiculo.getId();
 	}
 	
 	public String getVeiculoPlaca() {
@@ -23,8 +27,12 @@ public class VeiculoController {
 		return veiculo.getAno();
 	}
 	
-	public StatusVeiculo getVeiculoStatus() {
+	public StatusLocacao getVeiculoStatus() {
 		return veiculo.getStatus();
+	}
+	
+	public void setVeiculoId(Integer id) {
+		veiculo.setId(id);
 	}
 	
 	public void setVeiculoPlaca(String placa) {
@@ -39,7 +47,7 @@ public class VeiculoController {
 		veiculo.setAno(ano);
 	}
 	
-	public void setVeiculoStatus(StatusVeiculo status) {
+	public void setVeiculoStatus(StatusLocacao status) {
 		veiculo.setStatus(status);
 	}
 

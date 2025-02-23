@@ -1,9 +1,13 @@
 package model;
 
 public class Caminhao extends Veiculo {
+	
+	public Caminhao() {
+		
+	}
 
-	public Caminhao(String placa, String modelo, Integer ano, StatusVeiculo status) {
-		super(placa, modelo, ano, status);
+	public Caminhao(Integer id, String placa, String modelo, Integer ano, StatusLocacao status) {
+		super(id, placa, modelo, ano, status);
 	}
 
 	@Override

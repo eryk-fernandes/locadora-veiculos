@@ -14,6 +14,10 @@ public class LocacaoController {
 		this.locacao = locacao;
 	}
 	
+	public Integer getLocacaoId() {
+		return locacao.getId();
+	}
+	
 	public Cliente getLocacaoCliente() {
 		return locacao.getCliente();
 	}
@@ -28,6 +32,10 @@ public class LocacaoController {
 	
 	public LocalDate getLocacaoDevolucao() {
 		return locacao.getDevolucao();
+	}
+	
+	public void setLocacaoId(Integer id) {
+		locacao.setId(id);
 	}
 	
 	public void setLocacaoCliente(Cliente cliente) {
