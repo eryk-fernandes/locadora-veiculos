@@ -1,5 +1,6 @@
 package controller;
 
+import dao.VeiculoDAO;
 import model.StatusLocacao;
 import model.Veiculo;
 
@@ -42,5 +43,18 @@ public class VeiculoController {
 	public void setVeiculoStatus(StatusLocacao status) {
 		veiculo.setStatus(status);
 	}
+	
+	public void cadastrarVeiculo() throws Exception {
+		new VeiculoDAO().salvar(veiculo);
+	}
+	
+	public void removerVeiculo() throws Exception {
+		new VeiculoDAO().remover(veiculo);
+	}
+	
+	public void atualizarVeiculo() throws Exception {
+		new VeiculoDAO().atualizar(veiculo);
+	}
+
 
 }
