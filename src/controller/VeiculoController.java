@@ -11,10 +11,6 @@ public class VeiculoController {
 		this.veiculo = veiculo;
 	}
 	
-	public Integer getVeiculoId() {
-		return veiculo.getId();
-	}
-	
 	public String getVeiculoPlaca() {
 		return veiculo.getPlaca();
 	}
@@ -29,10 +25,6 @@ public class VeiculoController {
 	
 	public StatusLocacao getVeiculoStatus() {
 		return veiculo.getStatus();
-	}
-	
-	public void setVeiculoId(Integer id) {
-		veiculo.setId(id);
 	}
 	
 	public void setVeiculoPlaca(String placa) {

@@ -2,13 +2,18 @@ package dao;
 
 import java.util.List;
 
-public interface DAO<T> {
+public interface DAO<T, K> {
 
-	T recuperarPorId(int Id);
+	T recuperar(K k) throws Exception;
 	
-	List<T> recuperarTodos();
+	List<T> recuperarTodos() throws Exception;
 	
-	void salvar(T t);
+	void salvar(T t) throws Exception;
 	
-	void remover(T t);
+	void remover(T t) throws Exception;
+	
+	void atualizar(T t) throws Exception;
+
+	boolean isVazio() throws Exception;
+	
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import dao.ClienteDAO;
 import model.Cliente;
 
 public class ClienteController {
@@ -8,10 +9,6 @@ public class ClienteController {
 
 	public ClienteController(Cliente cliente) {
 		this.cliente = cliente;
-	}
-	
-	public Integer getClienteId() {
-		return cliente.getId();
 	}
 	
 	public String getClienteNome() {
@@ -30,10 +27,6 @@ public class ClienteController {
 		return cliente.getEmail();
 	}
 	
-	public void setClienteId(Integer id) {
-		cliente.setId(id);
-	}
-	
 	public void setClienteNome(String nome) {
 		cliente.setNome(nome);
 	}
@@ -48,6 +41,18 @@ public class ClienteController {
 
 	public void setClienteEmail(String email) {
 		cliente.setEmail(email);
+	}
+	
+	public void cadastrarCliente() throws Exception {
+		new ClienteDAO().salvar(cliente);
+	}
+	
+	public void removerCliente() throws Exception {
+		new ClienteDAO().remover(cliente);
+	}
+	
+	public void atualizarCliente() throws Exception {
+		new ClienteDAO().atualizar(cliente);
 	}
 
 }

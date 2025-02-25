@@ -1,8 +1,9 @@
 package model;
 
+import java.util.Objects;
+
 public class Cliente {
 
-	private Integer id;
 	private String nome;
 	private String cpf;
 	private String telefone;
@@ -17,10 +18,6 @@ public class Cliente {
 		this.cpf = cpf;
 		this.telefone = telefone;
 		this.email = email;
-	}
-
-	public Integer getId() {
-		return id;
 	}
 
 	public String getNome() {
@@ -39,10 +36,6 @@ public class Cliente {
 		return email;
 	}
 	
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
@@ -58,5 +51,12 @@ public class Cliente {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	@Override
+	public String toString() {
+		return "Cliente [nome=" + nome + ", cpf=" + cpf + ", telefone=" + telefone + ", email=" + email + "]";
+	}
+	
+	
 
 }

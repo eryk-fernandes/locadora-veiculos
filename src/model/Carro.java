@@ -6,8 +6,8 @@ public class Carro extends Veiculo {
 		
 	}
 
-	public Carro(Integer id, String placa, String modelo, Integer ano, StatusLocacao status) {
-		super(id, placa, modelo, ano, status);
+	public Carro(String placa, String modelo, Integer ano, StatusLocacao status) {
+		super(placa, modelo, ano, status);
 	}
 
 	@Override

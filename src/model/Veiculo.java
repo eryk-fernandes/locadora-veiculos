@@ -2,7 +2,6 @@ package model;
 
 public abstract class Veiculo {
 
-	protected Integer id;
 	protected String placa;
 	protected String modelo;
 	protected Integer ano;
@@ -12,16 +11,11 @@ public abstract class Veiculo {
 		
 	}
 	
-	public Veiculo(Integer id, String placa, String modelo, Integer ano, StatusLocacao status) {
-		this.id = id;
+	public Veiculo(String placa, String modelo, Integer ano, StatusLocacao status) {
 		this.placa = placa;
 		this.modelo = modelo;
 		this.ano = ano;
 		this.status = status;
-	}
-	
-	public Integer getId() {
-		return id;
 	}
 	
 	public String getPlaca() {
@@ -38,10 +32,6 @@ public abstract class Veiculo {
 	
 	public StatusLocacao getStatus() {
 		return status;
-	}
-	
-	public void setId(Integer id) {
-		this.id = id;
 	}
 	
 	public void setPlaca(String placa) {
