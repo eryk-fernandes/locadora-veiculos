@@ -2,6 +2,7 @@ package controller;
 
 import java.time.LocalDate;
 
+import dao.LocacaoDAO;
 import model.Cliente;
 import model.Locacao;
 import model.Veiculo;
@@ -52,6 +53,18 @@ public class LocacaoController {
 
 	public void setLocacaoDevolucao(LocalDate devolucao) {
 		locacao.setDevolucao(devolucao);
+	}
+	
+	public void cadastrarLocacao() throws Exception {
+		new LocacaoDAO().salvar(locacao);
+	}
+	
+	public void removerLocacao() throws Exception {
+		new LocacaoDAO().remover(locacao);
+	}
+	
+	public void atualizarLocacao() throws Exception {
+		new LocacaoDAO().atualizar(locacao);
 	}
 
 }

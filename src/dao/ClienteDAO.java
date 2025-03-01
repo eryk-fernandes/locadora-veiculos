@@ -4,7 +4,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -12,9 +11,11 @@ import com.google.gson.reflect.TypeToken;
 
 import model.Cliente;
 
-public class ClienteDAO implements DAO<Cliente, String> {
+public class ClienteDAO extends DAO<Cliente, String> {
 	
-	private static String caminhoJson = "src\\json\\cliente.json";
+	public ClienteDAO() {
+		this.caminhoJson = "src\\json\\clientes.json";
+	}
 
 	@Override
 	public Cliente recuperar(String cpf) throws Exception {
@@ -40,17 +41,17 @@ public class ClienteDAO implements DAO<Cliente, String> {
 			return null;
 		}
 
-		Cliente[] clientes;
+		List<Cliente> clientes;
 		
 		try (FileReader fr = new FileReader(caminhoJson)) {
 			
-			Type tipo = TypeToken.getArray(Cliente.class).getType();
+			Type tipo = new TypeToken<ArrayList<Cliente>>(){}.getType();
 
 			clientes = new Gson().fromJson(fr, tipo);
 			
 		}
 		
-		return Arrays.asList(clientes);
+		return clientes;
 	}
 
 	@Override
@@ -129,18 +130,6 @@ public class ClienteDAO implements DAO<Cliente, String> {
 		try (FileWriter fw = new FileWriter(caminhoJson)) {
 			fw.write(json);
 		}
-	}
-
-	@Override
-	public boolean isVazio() throws Exception {
-		
-		try (FileReader fr = new FileReader(caminhoJson)) {
-			if (fr.read() == -1) {
-				return true;
-			}
-		}
-		
-		return false;
 	}
 
 }

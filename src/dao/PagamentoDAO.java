@@ -4,7 +4,11 @@ import java.util.List;
 
 import model.Pagamento;
 
-public class PagamentoDAO implements DAO<Pagamento, Integer> {
+public class PagamentoDAO extends DAO<Pagamento, Integer> {
+	
+	public PagamentoDAO() {
+		this.caminhoJson = "src\\json\\pagamentos.json";
+	}
 
 	@Override
 	public Pagamento recuperar(Integer id) throws Exception {
@@ -29,11 +33,6 @@ public class PagamentoDAO implements DAO<Pagamento, Integer> {
 	@Override
 	public void atualizar(Pagamento pagamento) throws Exception {
 		
-	}
-
-	@Override
-	public boolean isVazio() throws Exception {
-		return false;
 	}
 
 }

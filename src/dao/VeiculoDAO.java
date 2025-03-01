@@ -4,7 +4,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -12,9 +11,11 @@ import com.google.gson.reflect.TypeToken;
 
 import model.Veiculo;
 
-public class VeiculoDAO implements DAO<Veiculo, String> {
+public class VeiculoDAO extends DAO<Veiculo, String> {
 	
-	private static String caminhoJson = "src\\json\\veiculo.json";
+	public VeiculoDAO() {
+		this.caminhoJson = "src\\json\\veiculos.json";
+	}
 	
 	@Override
 	public Veiculo recuperar(String placa) throws Exception {
@@ -39,17 +40,16 @@ public class VeiculoDAO implements DAO<Veiculo, String> {
 			return null;
 		}
 
-		Veiculo[] veiculos;
+		ArrayList<Veiculo> veiculos = new ArrayList<>();;
 		
 		try (FileReader fr = new FileReader(caminhoJson)) {
 			
-			Type tipo = TypeToken.getArray(Veiculo.class).getType();
+			Type tipo = new TypeToken<ArrayList<Veiculo>>(){}.getType();
 
 			veiculos = new Gson().fromJson(fr, tipo);
-			
 		}
 		
-		return Arrays.asList(veiculos);
+		return veiculos;
 	}
 
 	@Override
@@ -126,18 +126,6 @@ public class VeiculoDAO implements DAO<Veiculo, String> {
 		try (FileWriter fw = new FileWriter(caminhoJson)) {
 			fw.write(json);
 		}
-	}
-
-	@Override
-	public boolean isVazio() throws Exception {
-		
-		try (FileReader fr = new FileReader(caminhoJson)) {
-			if (fr.read() == -1) {
-				return true;
-			}
-		}
-		
-		return false;
 	}
 
 }

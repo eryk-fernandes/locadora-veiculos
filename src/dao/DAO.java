@@ -1,19 +1,19 @@
 package dao;
 
-import java.util.List;
+import java.io.FileReader;
 
-public interface DAO<T, K> {
+public abstract class DAO<T, K> implements Pesistencia<T, K> {
 
-	T recuperar(K k) throws Exception;
+	protected String caminhoJson;
 	
-	List<T> recuperarTodos() throws Exception;
-	
-	void salvar(T t) throws Exception;
-	
-	void remover(T t) throws Exception;
-	
-	void atualizar(T t) throws Exception;
-
-	boolean isVazio() throws Exception;
+	protected boolean isVazio() throws Exception {
+		try (FileReader fr = new FileReader(caminhoJson)) {
+			if (fr.read() == -1) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
 }
