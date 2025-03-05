@@ -19,9 +19,8 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 	public Cliente recuperar(String cpf) throws Exception {
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				return null;
-			}
 		}
 		
 		for (Cliente cliente : recuperarTodos()) {
@@ -38,9 +37,8 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 	public List<Cliente> recuperarTodos() throws Exception {
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				return null;
-			}
 		}
 
 		List<Cliente> clientes;
@@ -62,12 +60,10 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 		List<Cliente> clientes;
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				clientes = new ArrayList<>();
-			}
-			else {
+			else
 				clientes = new ArrayList<>(recuperarTodos());
-			}
 		}
 		
 		for (Cliente clienteAtual : clientes) {
@@ -93,12 +89,10 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 		List<Cliente> clientesNovo = new ArrayList<>();
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				clientes = new ArrayList<>();
-			}
-			else {
+			else
 				clientes = new ArrayList<>(recuperarTodos());
-			}
 		}
 		
 		for (Cliente clienteAtual : clientes) {
@@ -121,12 +115,10 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 		List<Cliente> clientesNovo = new ArrayList<>();
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				clientes = new ArrayList<>();
-			}
-			else {
+			else
 				clientes = new ArrayList<>(recuperarTodos());
-			}
 		}
 		
 		for (Cliente clienteAtual : clientes) {

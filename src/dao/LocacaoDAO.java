@@ -2,14 +2,16 @@ package dao;
 
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import model.Locacao;
+import model.Veiculo;
 
 public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 	
@@ -18,9 +20,8 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 	@Override
 	public Locacao recuperar(Integer id) throws Exception {
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				return null;
-			}
 		}
 		
 		for (Locacao locacao : recuperarTodos()) {
@@ -36,19 +37,22 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 	public List<Locacao> recuperarTodos() throws Exception {
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				return null;
-			}
 		}
 
 		List<Locacao> locacoes;
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
 			
-			Type tipo = new TypeToken<ArrayList<Locacao>>(){}.getType();
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.
+				registerTypeAdapter(Veiculo.class, new SerializadorVeiculo()).
+				registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
+				
+			Gson gson = gsonBuilder.create();
 
-			locacoes = new Gson().fromJson(fr, tipo);
-			
+			locacoes = gson.fromJson(fr, new TypeToken<ArrayList<Locacao>>(){}.getType());
 		}
 		
 		return locacoes;
@@ -60,23 +64,27 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 		List<Locacao> locacoes;
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				locacoes = new ArrayList<>();
-			}
-			else {
+			else
 				locacoes = new ArrayList<>(recuperarTodos());
-			}
 		}
 		
 		for (Locacao locacaoAtual : locacoes) {
-			if (locacao.getId().equals(locacaoAtual.getId())) {
+			if (locacao.getId().equals(locacaoAtual.getId()))
 				return;
-			}
 		}
 		
 		locacoes.add(locacao);
 		
-		String json = new Gson().toJson(locacoes);
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.
+			registerTypeAdapter(Veiculo.class, new SerializadorVeiculo()).
+			registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
+			
+		Gson gson = gsonBuilder.create();
+		
+		String json = gson.toJson(locacoes);
 		
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
@@ -88,24 +96,29 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 		
 		List<Locacao> locacoes;
 		
-		List<Locacao> locacaosNovo = new ArrayList<>();
+		List<Locacao> locacoesNovo = new ArrayList<>();
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				locacoes = new ArrayList<>();
-			}
-			else {
+			else
 				locacoes = new ArrayList<>(recuperarTodos());
-			}
 		}
 		
 		for (Locacao locacaoAtual : locacoes) {
 			if (!locacao.getId().equals(locacaoAtual.getId())) {
-				locacaosNovo.add(locacaoAtual);
+				locacoesNovo.add(locacaoAtual);
 			}
 		}
-
-		String json = new Gson().toJson(locacaosNovo);
+		
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.
+			registerTypeAdapter(Veiculo.class, new SerializadorVeiculo()).
+			registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
+			
+		Gson gson = gsonBuilder.create();
+		
+		String json = gson.toJson(locacoesNovo);
 		
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
@@ -136,8 +149,15 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 			}
 
 		}
-
-		String json = new Gson().toJson(locacoesNovo);
+		
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.
+			registerTypeAdapter(Veiculo.class, new SerializadorVeiculo()).
+			registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
+			
+		Gson gson = gsonBuilder.create();
+		
+		String json = gson.toJson(locacoesNovo);
 		
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);

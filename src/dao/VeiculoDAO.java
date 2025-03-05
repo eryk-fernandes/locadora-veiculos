@@ -19,9 +19,8 @@ public class VeiculoDAO implements Persistencia<Veiculo, String> {
 	public Veiculo recuperar(String placa) throws Exception {
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				return null;
-			}
 		}
 		
 		for (Veiculo veiculo : recuperarTodos()) {
@@ -37,19 +36,18 @@ public class VeiculoDAO implements Persistencia<Veiculo, String> {
 	public List<Veiculo> recuperarTodos() throws Exception {
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				return null;
-			}
 		}
 
 		ArrayList<Veiculo> veiculos = new ArrayList<>();;
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
 			
-			GsonBuilder gb = new GsonBuilder();
-			gb.registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>());
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.registerTypeAdapter(Veiculo.class, new SerializadorVeiculo());
 			
-			Gson gson = gb.create();
+			Gson gson = gsonBuilder.create();
 			
 			veiculos = gson.fromJson(fr, new TypeToken<ArrayList<Veiculo>>(){}.getType());
 		}
@@ -58,32 +56,30 @@ public class VeiculoDAO implements Persistencia<Veiculo, String> {
 	}
 
 	@Override
-	public void salvar(Veiculo moto) throws Exception {
+	public void salvar(Veiculo veiculo) throws Exception {
 		List<Veiculo> veiculos;
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				veiculos = new ArrayList<>();
-			}
-			else {
+			else
 				veiculos = new ArrayList<>(recuperarTodos());
-			}
 		}
 		
 		for (Veiculo veiculoAtual : veiculos) {
-			if (moto.getPlaca().equals(veiculoAtual.getPlaca())) {
+			if (veiculo.getPlaca().equals(veiculoAtual.getPlaca())) {
 				return;
 			}
 		}
 		
-		veiculos.add(moto);
+		veiculos.add(veiculo);
 		
-		GsonBuilder gb = new GsonBuilder();
-		gb.registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>());
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(Veiculo.class, new SerializadorVeiculo());
 		
-		Gson gson = gb.create();
+		Gson gson = gsonBuilder.create();
 		
-		String json = gson.toJson(veiculos, new TypeToken<ArrayList<Veiculo>>(){}.getType());
+		String json = gson.toJson(veiculos);
 		
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
@@ -97,12 +93,10 @@ public class VeiculoDAO implements Persistencia<Veiculo, String> {
 		List<Veiculo> veiculosNovo = new ArrayList<>();
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				veiculos = new ArrayList<>();
-			}
-			else {
+			else
 				veiculos = new ArrayList<>(recuperarTodos());
-			}
 		}
 		
 		for (Veiculo veiculoAtual : veiculos) {
@@ -111,12 +105,12 @@ public class VeiculoDAO implements Persistencia<Veiculo, String> {
 			}
 		}
 
-		GsonBuilder gb = new GsonBuilder();
-		gb.registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>());
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(Veiculo.class, new SerializadorVeiculo());
 		
-		Gson gson = gb.create();
+		Gson gson = gsonBuilder.create();
 		
-		String json = gson.toJson(veiculosNovo, new TypeToken<ArrayList<Veiculo>>(){}.getType());
+		String json = gson.toJson(veiculosNovo);
 		
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
@@ -130,12 +124,10 @@ public class VeiculoDAO implements Persistencia<Veiculo, String> {
 		List<Veiculo> veiculosNovo = new ArrayList<>();
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1) {
+			if (fr.read() == -1)
 				veiculos = new ArrayList<>();
-			}
-			else {
+			else
 				veiculos = new ArrayList<>(recuperarTodos());
-			}
 		}
 		
 		for (Veiculo veiculoAtual : veiculos) {
@@ -145,15 +137,14 @@ public class VeiculoDAO implements Persistencia<Veiculo, String> {
 			else {
 				veiculosNovo.add(veiculoAtual);
 			}
-
 		}
 		
-		GsonBuilder gb = new GsonBuilder();
-		gb.registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>());
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(Veiculo.class, new SerializadorVeiculo());
 		
-		Gson gson = gb.create();
+		Gson gson = gsonBuilder.create();
 		
-		String json = gson.toJson(veiculosNovo, new TypeToken<ArrayList<Veiculo>>(){}.getType());
+		String json = gson.toJson(veiculosNovo);
 		
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);

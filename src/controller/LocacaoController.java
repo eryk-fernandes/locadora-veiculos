@@ -59,6 +59,10 @@ public class LocacaoController {
 		new LocacaoDAO().salvar(locacao);
 	}
 	
+	public Locacao recuperar(Integer id) throws Exception {
+		return new LocacaoDAO().recuperar(id);
+	}
+	
 	public void remover() throws Exception {
 		new LocacaoDAO().remover(locacao);
 	}

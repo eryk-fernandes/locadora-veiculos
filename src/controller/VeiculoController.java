@@ -56,5 +56,4 @@ public class VeiculoController {
 		new VeiculoDAO().atualizar(veiculo);
 	}
 
-
 }

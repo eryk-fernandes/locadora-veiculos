@@ -61,5 +61,5 @@ public class Locacao {
 	public void setDevolucao(LocalDate devolucao) {
 		this.devolucao = devolucao;
 	}
-
+	
 }
