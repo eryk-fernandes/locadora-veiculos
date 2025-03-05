@@ -2,7 +2,7 @@ package dao;
 
 import java.util.List;
 
-public interface Pesistencia<T, K> {
+public interface Persistencia<T, K> {
 	
 	T recuperar(K k) throws Exception;
 	

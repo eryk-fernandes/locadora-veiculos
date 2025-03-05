@@ -2,26 +2,26 @@ package dao;
 
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import model.Veiculo;
 
-public class VeiculoDAO extends DAO<Veiculo, String> {
+public class VeiculoDAO implements Persistencia<Veiculo, String> {
 	
-	public VeiculoDAO() {
-		this.caminhoJson = "src\\json\\veiculos.json";
-	}
+	private static final String CAMINHO_JSON = "src/json/veiculos.json";
 	
 	@Override
 	public Veiculo recuperar(String placa) throws Exception {
 		
-		if (isVazio()) {
-			return null;
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				return null;
+			}
 		}
 		
 		for (Veiculo veiculo : recuperarTodos()) {
@@ -36,94 +36,126 @@ public class VeiculoDAO extends DAO<Veiculo, String> {
 	@Override
 	public List<Veiculo> recuperarTodos() throws Exception {
 		
-		if (isVazio()) {
-			return null;
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				return null;
+			}
 		}
 
 		ArrayList<Veiculo> veiculos = new ArrayList<>();;
 		
-		try (FileReader fr = new FileReader(caminhoJson)) {
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
 			
-			Type tipo = new TypeToken<ArrayList<Veiculo>>(){}.getType();
-
-			veiculos = new Gson().fromJson(fr, tipo);
+			GsonBuilder gb = new GsonBuilder();
+			gb.registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>());
+			
+			Gson gson = gb.create();
+			
+			veiculos = gson.fromJson(fr, new TypeToken<ArrayList<Veiculo>>(){}.getType());
 		}
 		
 		return veiculos;
 	}
 
 	@Override
-	public void salvar(Veiculo veiculo) throws Exception {
+	public void salvar(Veiculo moto) throws Exception {
 		List<Veiculo> veiculos;
 		
-		if (isVazio()) 
-			veiculos = new ArrayList<>();
-		else
-			veiculos = new ArrayList<>(recuperarTodos());
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				veiculos = new ArrayList<>();
+			}
+			else {
+				veiculos = new ArrayList<>(recuperarTodos());
+			}
+		}
 		
 		for (Veiculo veiculoAtual : veiculos) {
-			if (veiculo.getPlaca().equals(veiculoAtual.getPlaca())) {
+			if (moto.getPlaca().equals(veiculoAtual.getPlaca())) {
 				return;
 			}
 		}
 		
-		veiculos.add(veiculo);
+		veiculos.add(moto);
 		
-		String json = new Gson().toJson(veiculos);
+		GsonBuilder gb = new GsonBuilder();
+		gb.registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>());
 		
-		try (FileWriter fw = new FileWriter(caminhoJson)) {
+		Gson gson = gb.create();
+		
+		String json = gson.toJson(veiculos, new TypeToken<ArrayList<Veiculo>>(){}.getType());
+		
+		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
 	}
 
 	@Override
-	public void remover(Veiculo veiculo) throws Exception {
+	public void remover(Veiculo moto) throws Exception {
 		List<Veiculo> veiculos;
 		
 		List<Veiculo> veiculosNovo = new ArrayList<>();
 		
-		if (isVazio()) 
-			veiculos = new ArrayList<>();
-		else
-			veiculos = new ArrayList<>(recuperarTodos());
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				veiculos = new ArrayList<>();
+			}
+			else {
+				veiculos = new ArrayList<>(recuperarTodos());
+			}
+		}
 		
 		for (Veiculo veiculoAtual : veiculos) {
-			if (!veiculo.getPlaca().equals(veiculoAtual.getPlaca())) {
+			if (!moto.getPlaca().equals(veiculoAtual.getPlaca())) {
 				veiculosNovo.add(veiculoAtual);
 			}
 		}
 
-		String json = new Gson().toJson(veiculosNovo);
+		GsonBuilder gb = new GsonBuilder();
+		gb.registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>());
 		
-		try (FileWriter fw = new FileWriter(caminhoJson)) {
+		Gson gson = gb.create();
+		
+		String json = gson.toJson(veiculosNovo, new TypeToken<ArrayList<Veiculo>>(){}.getType());
+		
+		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
 	}
 	
 	@Override
-	public void atualizar(Veiculo veiculo) throws Exception {
+	public void atualizar(Veiculo moto) throws Exception {
 		List<Veiculo> veiculos;
 		
 		List<Veiculo> veiculosNovo = new ArrayList<>();
 		
-		if (isVazio()) 
-			veiculos = new ArrayList<>();
-		else
-			veiculos = new ArrayList<>(recuperarTodos());
-		
-		for (Veiculo clienteAtual : veiculos) {
-			if (veiculo.getPlaca().equals(clienteAtual.getPlaca())) {
-				veiculosNovo.add(veiculo);
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				veiculos = new ArrayList<>();
 			}
 			else {
-				veiculosNovo.add(clienteAtual);
+				veiculos = new ArrayList<>(recuperarTodos());
+			}
+		}
+		
+		for (Veiculo veiculoAtual : veiculos) {
+			if (moto.getPlaca().equals(veiculoAtual.getPlaca())) {
+				veiculosNovo.add(moto);
+			}
+			else {
+				veiculosNovo.add(veiculoAtual);
 			}
 
 		}
-
-		String json = new Gson().toJson(veiculosNovo);
 		
-		try (FileWriter fw = new FileWriter(caminhoJson)) {
+		GsonBuilder gb = new GsonBuilder();
+		gb.registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>());
+		
+		Gson gson = gb.create();
+		
+		String json = gson.toJson(veiculosNovo, new TypeToken<ArrayList<Veiculo>>(){}.getType());
+		
+		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
 	}

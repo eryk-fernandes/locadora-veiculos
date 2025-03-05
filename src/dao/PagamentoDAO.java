@@ -4,11 +4,7 @@ import java.util.List;
 
 import model.Pagamento;
 
-public class PagamentoDAO extends DAO<Pagamento, Integer> {
-	
-	public PagamentoDAO() {
-		this.caminhoJson = "src\\json\\pagamentos.json";
-	}
+public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 
 	@Override
 	public Pagamento recuperar(Integer id) throws Exception {
@@ -29,7 +25,7 @@ public class PagamentoDAO extends DAO<Pagamento, Integer> {
 	public void remover(Pagamento pagamento) throws Exception {
 		
 	}
-	
+
 	@Override
 	public void atualizar(Pagamento pagamento) throws Exception {
 		

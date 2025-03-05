@@ -43,15 +43,15 @@ public class ClienteController {
 		cliente.setEmail(email);
 	}
 	
-	public void cadastrarCliente() throws Exception {
+	public void salvar() throws Exception {
 		new ClienteDAO().salvar(cliente);
 	}
 	
-	public void removerCliente() throws Exception {
+	public void remover() throws Exception {
 		new ClienteDAO().remover(cliente);
 	}
 	
-	public void atualizarCliente() throws Exception {
+	public void atualizar() throws Exception {
 		new ClienteDAO().atualizar(cliente);
 	}
 

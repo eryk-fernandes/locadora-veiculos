@@ -44,15 +44,15 @@ public class VeiculoController {
 		veiculo.setStatus(status);
 	}
 	
-	public void cadastrarVeiculo() throws Exception {
+	public void salvar() throws Exception {
 		new VeiculoDAO().salvar(veiculo);
 	}
 	
-	public void removerVeiculo() throws Exception {
+	public void remover() throws Exception {
 		new VeiculoDAO().remover(veiculo);
 	}
 	
-	public void atualizarVeiculo() throws Exception {
+	public void atualizar() throws Exception {
 		new VeiculoDAO().atualizar(veiculo);
 	}
 

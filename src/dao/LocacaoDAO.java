@@ -11,16 +11,16 @@ import com.google.gson.reflect.TypeToken;
 
 import model.Locacao;
 
-public class LocacaoDAO extends DAO<Locacao, Integer> {
+public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 	
-	public LocacaoDAO() {
-		this.caminhoJson = "src\\json\\locacoes.json";
-	}
+	private static final String CAMINHO_JSON = "src/json/locacoes.json";
 
 	@Override
 	public Locacao recuperar(Integer id) throws Exception {
-		if (isVazio()) {
-			return null;
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				return null;
+			}
 		}
 		
 		for (Locacao locacao : recuperarTodos()) {
@@ -35,13 +35,15 @@ public class LocacaoDAO extends DAO<Locacao, Integer> {
 	@Override
 	public List<Locacao> recuperarTodos() throws Exception {
 		
-		if (isVazio()) {
-			return null;
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				return null;
+			}
 		}
 
 		List<Locacao> locacoes;
 		
-		try (FileReader fr = new FileReader(caminhoJson)) {
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
 			
 			Type tipo = new TypeToken<ArrayList<Locacao>>(){}.getType();
 
@@ -57,10 +59,14 @@ public class LocacaoDAO extends DAO<Locacao, Integer> {
 		
 		List<Locacao> locacoes;
 		
-		if (isVazio()) 
-			locacoes = new ArrayList<>();
-		else
-			locacoes = new ArrayList<>(recuperarTodos());
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				locacoes = new ArrayList<>();
+			}
+			else {
+				locacoes = new ArrayList<>(recuperarTodos());
+			}
+		}
 		
 		for (Locacao locacaoAtual : locacoes) {
 			if (locacao.getId().equals(locacaoAtual.getId())) {
@@ -72,7 +78,7 @@ public class LocacaoDAO extends DAO<Locacao, Integer> {
 		
 		String json = new Gson().toJson(locacoes);
 		
-		try (FileWriter fw = new FileWriter(caminhoJson)) {
+		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
 	}
@@ -80,16 +86,20 @@ public class LocacaoDAO extends DAO<Locacao, Integer> {
 	@Override
 	public void remover(Locacao locacao) throws Exception {
 		
-		List<Locacao> locacaos;
+		List<Locacao> locacoes;
 		
 		List<Locacao> locacaosNovo = new ArrayList<>();
 		
-		if (isVazio()) 
-			locacaos = new ArrayList<>();
-		else
-			locacaos = new ArrayList<>(recuperarTodos());
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				locacoes = new ArrayList<>();
+			}
+			else {
+				locacoes = new ArrayList<>(recuperarTodos());
+			}
+		}
 		
-		for (Locacao locacaoAtual : locacaos) {
+		for (Locacao locacaoAtual : locacoes) {
 			if (!locacao.getId().equals(locacaoAtual.getId())) {
 				locacaosNovo.add(locacaoAtual);
 			}
@@ -97,7 +107,7 @@ public class LocacaoDAO extends DAO<Locacao, Integer> {
 
 		String json = new Gson().toJson(locacaosNovo);
 		
-		try (FileWriter fw = new FileWriter(caminhoJson)) {
+		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
 	}
@@ -108,10 +118,14 @@ public class LocacaoDAO extends DAO<Locacao, Integer> {
 		
 		List<Locacao> locacoesNovo = new ArrayList<>();
 		
-		if (isVazio()) 
-			locacoes = new ArrayList<>();
-		else
-			locacoes = new ArrayList<>(recuperarTodos());
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				locacoes = new ArrayList<>();
+			}
+			else {
+				locacoes = new ArrayList<>(recuperarTodos());
+			}
+		}
 		
 		for (Locacao locacaoAtual : locacoes) {
 			if (locacao.getId().equals(locacaoAtual.getId())) {
@@ -125,7 +139,7 @@ public class LocacaoDAO extends DAO<Locacao, Integer> {
 
 		String json = new Gson().toJson(locacoesNovo);
 		
-		try (FileWriter fw = new FileWriter(caminhoJson)) {
+		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
 	}

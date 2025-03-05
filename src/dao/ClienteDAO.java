@@ -11,17 +11,17 @@ import com.google.gson.reflect.TypeToken;
 
 import model.Cliente;
 
-public class ClienteDAO extends DAO<Cliente, String> {
+public class ClienteDAO implements Persistencia<Cliente, String> {
 	
-	public ClienteDAO() {
-		this.caminhoJson = "src\\json\\clientes.json";
-	}
+	private static final String CAMINHO_JSON = "src/json/veiculos.json";
 
 	@Override
 	public Cliente recuperar(String cpf) throws Exception {
 		
-		if (isVazio()) {
-			return null;
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				return null;
+			}
 		}
 		
 		for (Cliente cliente : recuperarTodos()) {
@@ -37,13 +37,15 @@ public class ClienteDAO extends DAO<Cliente, String> {
 	@Override
 	public List<Cliente> recuperarTodos() throws Exception {
 		
-		if (isVazio()) {
-			return null;
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				return null;
+			}
 		}
 
 		List<Cliente> clientes;
 		
-		try (FileReader fr = new FileReader(caminhoJson)) {
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
 			
 			Type tipo = new TypeToken<ArrayList<Cliente>>(){}.getType();
 
@@ -59,10 +61,14 @@ public class ClienteDAO extends DAO<Cliente, String> {
 		
 		List<Cliente> clientes;
 		
-		if (isVazio()) 
-			clientes = new ArrayList<>();
-		else
-			clientes = new ArrayList<>(recuperarTodos());
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				clientes = new ArrayList<>();
+			}
+			else {
+				clientes = new ArrayList<>(recuperarTodos());
+			}
+		}
 		
 		for (Cliente clienteAtual : clientes) {
 			if (cliente.getCpf().equals(clienteAtual.getCpf())) {
@@ -74,7 +80,7 @@ public class ClienteDAO extends DAO<Cliente, String> {
 		
 		String json = new Gson().toJson(clientes);
 		
-		try (FileWriter fw = new FileWriter(caminhoJson)) {
+		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
 
@@ -86,10 +92,14 @@ public class ClienteDAO extends DAO<Cliente, String> {
 		
 		List<Cliente> clientesNovo = new ArrayList<>();
 		
-		if (isVazio()) 
-			clientes = new ArrayList<>();
-		else
-			clientes = new ArrayList<>(recuperarTodos());
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				clientes = new ArrayList<>();
+			}
+			else {
+				clientes = new ArrayList<>(recuperarTodos());
+			}
+		}
 		
 		for (Cliente clienteAtual : clientes) {
 			if (!cliente.getCpf().equals(clienteAtual.getCpf())) {
@@ -99,7 +109,7 @@ public class ClienteDAO extends DAO<Cliente, String> {
 
 		String json = new Gson().toJson(clientesNovo);
 		
-		try (FileWriter fw = new FileWriter(caminhoJson)) {
+		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
 	}
@@ -110,10 +120,14 @@ public class ClienteDAO extends DAO<Cliente, String> {
 		
 		List<Cliente> clientesNovo = new ArrayList<>();
 		
-		if (isVazio()) 
-			clientes = new ArrayList<>();
-		else
-			clientes = new ArrayList<>(recuperarTodos());
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1) {
+				clientes = new ArrayList<>();
+			}
+			else {
+				clientes = new ArrayList<>(recuperarTodos());
+			}
+		}
 		
 		for (Cliente clienteAtual : clientes) {
 			if (cliente.getCpf().equals(clienteAtual.getCpf())) {
@@ -127,7 +141,7 @@ public class ClienteDAO extends DAO<Cliente, String> {
 
 		String json = new Gson().toJson(clientesNovo);
 		
-		try (FileWriter fw = new FileWriter(caminhoJson)) {
+		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
 	}

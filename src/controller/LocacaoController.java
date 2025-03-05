@@ -55,15 +55,15 @@ public class LocacaoController {
 		locacao.setDevolucao(devolucao);
 	}
 	
-	public void cadastrarLocacao() throws Exception {
+	public void salvar() throws Exception {
 		new LocacaoDAO().salvar(locacao);
 	}
 	
-	public void removerLocacao() throws Exception {
+	public void remover() throws Exception {
 		new LocacaoDAO().remover(locacao);
 	}
 	
-	public void atualizarLocacao() throws Exception {
+	public void atualizar() throws Exception {
 		new LocacaoDAO().atualizar(locacao);
 	}
 
