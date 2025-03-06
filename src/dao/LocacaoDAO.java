@@ -2,6 +2,7 @@ package dao;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 	private static final String CAMINHO_JSON = "src/json/locacoes.json";
 
 	@Override
-	public Locacao recuperar(Integer id) throws Exception {
+	public Locacao recuperar(Integer id) throws IOException {
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
 			if (fr.read() == -1)
 				return null;
@@ -34,7 +35,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 	}
 
 	@Override
-	public List<Locacao> recuperarTodos() throws Exception {
+	public List<Locacao> recuperarTodos() throws IOException {
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
 			if (fr.read() == -1)
@@ -47,7 +48,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 			
 			GsonBuilder gsonBuilder = new GsonBuilder();
 			gsonBuilder.
-				registerTypeAdapter(Veiculo.class, new SerializadorVeiculo()).
+				registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>()).
 				registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
 				
 			Gson gson = gsonBuilder.create();
@@ -59,7 +60,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 	}
 
 	@Override
-	public void salvar(Locacao locacao) throws Exception {
+	public void salvar(Locacao locacao) throws IOException {
 		
 		List<Locacao> locacoes;
 		
@@ -79,7 +80,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 		
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.
-			registerTypeAdapter(Veiculo.class, new SerializadorVeiculo()).
+			registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>()).
 			registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
 			
 		Gson gson = gsonBuilder.create();
@@ -92,7 +93,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 	}
 
 	@Override
-	public void remover(Locacao locacao) throws Exception {
+	public void remover(Locacao locacao) throws IOException {
 		
 		List<Locacao> locacoes;
 		
@@ -113,7 +114,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 		
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.
-			registerTypeAdapter(Veiculo.class, new SerializadorVeiculo()).
+			registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>()).
 			registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
 			
 		Gson gson = gsonBuilder.create();
@@ -126,7 +127,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 	}
 	
 	@Override
-	public void atualizar(Locacao locacao) throws Exception {
+	public void atualizar(Locacao locacao) throws IOException {
 		List<Locacao> locacoes;
 		
 		List<Locacao> locacoesNovo = new ArrayList<>();
@@ -152,7 +153,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 		
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.
-			registerTypeAdapter(Veiculo.class, new SerializadorVeiculo()).
+			registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>()).
 			registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
 			
 		Gson gson = gsonBuilder.create();

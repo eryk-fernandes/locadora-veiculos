@@ -11,23 +11,21 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-import model.Veiculo;
-
-public class SerializadorVeiculo implements JsonSerializer<Veiculo>, JsonDeserializer<Veiculo> {
+public class Serializador<T> implements JsonSerializer<T>, JsonDeserializer<T> {
 	
 	@Override
-	public JsonElement serialize(Veiculo veiculo, Type tipo, JsonSerializationContext serializador) {
+	public JsonElement serialize(T t, Type tipo, JsonSerializationContext serializador) {
 		
 		JsonObject objeto = new JsonObject();
 		
-		objeto.add("tipo", new JsonPrimitive(veiculo.getClass().getSimpleName()));
-		objeto.add("propriedades", serializador.serialize(veiculo, veiculo.getClass()));
+		objeto.add("tipo", new JsonPrimitive(t.getClass().getSimpleName()));
+		objeto.add("propriedades", serializador.serialize(t, t.getClass()));
 		
 		return objeto;
 	}
 	
 	@Override
-	public Veiculo deserialize(JsonElement json, Type tipo, JsonDeserializationContext deserializador) throws JsonParseException {
+	public T deserialize(JsonElement json, Type tipo, JsonDeserializationContext deserializador) throws JsonParseException {
 		
 		JsonObject objeto = json.getAsJsonObject();
 		

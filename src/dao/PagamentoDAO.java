@@ -2,6 +2,7 @@ package dao;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 	private static final String CAMINHO_JSON = "src/json/pagamentos.json";
 
 	@Override
-	public Pagamento recuperar(Integer id) throws Exception {
+	public Pagamento recuperar(Integer id) throws IOException {
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
 			if (fr.read() == -1)
@@ -33,7 +34,7 @@ public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 	}
 
 	@Override
-	public List<Pagamento> recuperarTodos() throws Exception {
+	public List<Pagamento> recuperarTodos() throws IOException {
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
 			if (fr.read() == -1)
@@ -54,7 +55,7 @@ public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 	}
 
 	@Override
-	public void salvar(Pagamento pagamento) throws Exception {
+	public void salvar(Pagamento pagamento) throws IOException {
 		
 		List<Pagamento> pagamentos;
 		
@@ -81,7 +82,7 @@ public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 	}
 
 	@Override
-	public void remover(Pagamento pagamento) throws Exception {
+	public void remover(Pagamento pagamento) throws IOException {
 		List<Pagamento> pagamentos;
 		
 		List<Pagamento> pagamentosNovo = new ArrayList<>();
@@ -107,7 +108,7 @@ public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 	}
 
 	@Override
-	public void atualizar(Pagamento pagamento) throws Exception {
+	public void atualizar(Pagamento pagamento) throws IOException {
 		List<Pagamento> pagamentos;
 		
 		List<Pagamento> pagamentosNovo = new ArrayList<>();

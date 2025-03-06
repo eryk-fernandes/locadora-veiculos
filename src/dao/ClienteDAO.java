@@ -2,6 +2,7 @@ package dao;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 	private static final String CAMINHO_JSON = "src/json/veiculos.json";
 
 	@Override
-	public Cliente recuperar(String cpf) throws Exception {
+	public Cliente recuperar(String cpf) throws IOException {
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
 			if (fr.read() == -1)
@@ -34,7 +35,7 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 	}
 
 	@Override
-	public List<Cliente> recuperarTodos() throws Exception {
+	public List<Cliente> recuperarTodos() throws IOException {
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
 			if (fr.read() == -1)
@@ -55,7 +56,7 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 	}
 
 	@Override
-	public void salvar(Cliente cliente) throws Exception {
+	public void salvar(Cliente cliente) throws IOException {
 		
 		List<Cliente> clientes;
 		
@@ -83,7 +84,7 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 	}
 
 	@Override
-	public void remover(Cliente cliente) throws Exception {
+	public void remover(Cliente cliente) throws IOException {
 		List<Cliente> clientes;
 		
 		List<Cliente> clientesNovo = new ArrayList<>();
@@ -109,7 +110,7 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 	}
 	
 	@Override
-	public void atualizar(Cliente cliente) throws Exception {
+	public void atualizar(Cliente cliente) throws IOException {
 		List<Cliente> clientes;
 		
 		List<Cliente> clientesNovo = new ArrayList<>();
