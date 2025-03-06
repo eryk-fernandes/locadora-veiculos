@@ -15,8 +15,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controller.UsuarioController;
-import excecoes.UsuarioNaoEncontradoException;
 import excecoes.SenhaIncorretaException;
+import excecoes.UsuarioNaoEncontradoException;
 
 public class LoginView extends JFrame {
 
@@ -53,27 +53,27 @@ public class LoginView extends JFrame {
 		JLabel textoSenha = new JLabel("SENHA");
 		textoSenha.setHorizontalAlignment(SwingConstants.CENTER);
 		textoSenha.setFont(new Font("Verdana", Font.PLAIN, 15));
-		textoSenha.setBounds(82, 181, 261, 20);
+		textoSenha.setBounds(82, 158, 261, 20);
 		contentPane.add(textoSenha);
 		
 		JLabel textoUsuario = new JLabel("USUÁRIO");
 		textoUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 		textoUsuario.setFont(new Font("Verdana", Font.PLAIN, 15));
-		textoUsuario.setBounds(82, 108, 261, 20);
+		textoUsuario.setBounds(82, 96, 261, 20);
 		contentPane.add(textoUsuario);
 		
 		nomeUsuario = new JTextField();
-		nomeUsuario.setBounds(124, 139, 180, 20);
+		nomeUsuario.setBounds(124, 127, 180, 20);
 		contentPane.add(nomeUsuario);
 		nomeUsuario.setColumns(10);
 		
 		senha = new JPasswordField();
-		senha.setBounds(124, 212, 180, 20);
+		senha.setBounds(124, 189, 180, 20);
 		senha.setColumns(10);
 		contentPane.add(senha);
 		
 		btnEntrar = new JButton("ENTRAR");
-		btnEntrar.setBounds(124, 257, 180, 23);
+		btnEntrar.setBounds(124, 232, 180, 23);
 		contentPane.add(btnEntrar);
 		
 		btnEntrar.addActionListener(new ActionListener() {
@@ -84,8 +84,19 @@ public class LoginView extends JFrame {
 					
 					JOptionPane.showMessageDialog(contentPane, "USUÁRIO E SENHA CORRETOS");
 					
-					setVisible(false);
+					String tipo = usuarioController.retornarTipoUsuario(nomeUsuario);
 					
+					if (tipo.equals("Administrador")) {
+						new UsuarioView().setVisible(true);;
+					}
+					else if (tipo.equals("Gerente")) {
+						new GerenteView().setVisible(true);
+					}
+					else {
+						new AtendenteView().setVisible(true);
+					}
+					
+					setVisible(false);
 					
 				}
 				catch (UsuarioNaoEncontradoException e1) {

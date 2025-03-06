@@ -11,7 +11,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class Serializador<T> implements JsonSerializer<T>, JsonDeserializer<T> {
+public class SerializadorModel<T> implements JsonSerializer<T>, JsonDeserializer<T> {
 	
 	@Override
 	public JsonElement serialize(T t, Type tipo, JsonSerializationContext serializador) {

@@ -1,16 +1,21 @@
 package view;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-public class CadastroClienteView extends JFrame {
+import controller.ClienteController;
+
+public class ClienteView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -18,8 +23,10 @@ public class CadastroClienteView extends JFrame {
 	private JTextField cpf;
 	private JTextField telefone;
 	private JTextField email;
+	
+	private ClienteController clienteController = new ClienteController();
 
-	public CadastroClienteView() {
+	public ClienteView() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 470, 330);
@@ -34,26 +41,6 @@ public class CadastroClienteView extends JFrame {
 		textoCadastro.setHorizontalAlignment(SwingConstants.CENTER);
 		textoCadastro.setBounds(117, 38, 223, 38);
 		contentPane.add(textoCadastro);
-		
-		nome = new JTextField();
-		nome.setBounds(29, 126, 184, 20);
-		contentPane.add(nome);
-		nome.setColumns(10);
-		
-		cpf = new JTextField();
-		cpf.setColumns(10);
-		cpf.setBounds(29, 182, 184, 20);
-		contentPane.add(cpf);
-		
-		telefone = new JTextField();
-		telefone.setColumns(10);
-		telefone.setBounds(235, 126, 184, 20);
-		contentPane.add(telefone);
-		
-		email = new JTextField();
-		email.setColumns(10);
-		email.setBounds(235, 182, 184, 20);
-		contentPane.add(email);
 		
 		JLabel textoNome = new JLabel("NOME");
 		textoNome.setHorizontalAlignment(SwingConstants.CENTER);
@@ -75,9 +62,46 @@ public class CadastroClienteView extends JFrame {
 		textoEmail.setBounds(235, 157, 184, 14);
 		contentPane.add(textoEmail);
 		
+		nome = new JTextField();
+		nome.setBounds(29, 126, 184, 20);
+		contentPane.add(nome);
+		nome.setColumns(10);
+		
+		cpf = new JTextField();
+		cpf.setColumns(10);
+		cpf.setBounds(29, 182, 184, 20);
+		contentPane.add(cpf);
+		
+		telefone = new JTextField();
+		telefone.setColumns(10);
+		telefone.setBounds(235, 126, 184, 20);
+		contentPane.add(telefone);
+		
+		email = new JTextField();
+		email.setColumns(10);
+		email.setBounds(235, 182, 184, 20);
+		contentPane.add(email);
+		
 		JButton btnCadastrar = new JButton("CADASTRAR CLIENTE");
-		btnCadastrar.setBounds(150, 232, 152, 23);
+		btnCadastrar.setBounds(131, 232, 185, 23);
 		contentPane.add(btnCadastrar);
+		
+		btnCadastrar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e){
+				try {
+					clienteController.cadastrarDados(nome, cpf, telefone, email);
+					
+					JOptionPane.showMessageDialog(contentPane, "CLIENTE ADICIONADO COM SUCESSO");
+					
+					setVisible(false);
+					
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(contentPane, "ERRO AO ADICIONAR CLIENTE");
+				}
+			}
+		});
+		
 	}
 
 }

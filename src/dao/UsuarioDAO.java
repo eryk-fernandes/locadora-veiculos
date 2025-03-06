@@ -46,7 +46,7 @@ public class UsuarioDAO implements Persistencia<Usuario, String> {
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
 			
 			GsonBuilder gsonBuilder = new GsonBuilder();
-			gsonBuilder.registerTypeAdapter(Usuario.class, new Serializador<Usuario>());
+			gsonBuilder.registerTypeAdapter(Usuario.class, new SerializadorModel<Usuario>());
 			
 			Gson gson = gsonBuilder.create();
 			
@@ -76,7 +76,7 @@ public class UsuarioDAO implements Persistencia<Usuario, String> {
 		usuarios.add(usuario);
 		
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(Usuario.class, new Serializador<Usuario>());
+		gsonBuilder.registerTypeAdapter(Usuario.class, new SerializadorModel<Usuario>());
 		
 		Gson gson = gsonBuilder.create();
 		
@@ -107,7 +107,7 @@ public class UsuarioDAO implements Persistencia<Usuario, String> {
 		}
 
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(Usuario.class, new Serializador<Usuario>());
+		gsonBuilder.registerTypeAdapter(Usuario.class, new SerializadorModel<Usuario>());
 		
 		Gson gson = gsonBuilder.create();
 		
@@ -141,7 +141,7 @@ public class UsuarioDAO implements Persistencia<Usuario, String> {
 		}
 		
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(Usuario.class, new Serializador<Usuario>());
+		gsonBuilder.registerTypeAdapter(Usuario.class, new SerializadorModel<Usuario>());
 		
 		Gson gson = gsonBuilder.create();
 		

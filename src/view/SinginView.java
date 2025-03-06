@@ -28,7 +28,7 @@ public class SinginView extends JFrame {
 
 	public SinginView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 470, 330);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -38,39 +38,39 @@ public class SinginView extends JFrame {
 		JLabel lblNewLabel = new JLabel("SIGN IN ADMINISTRADOR");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Verdana", Font.PLAIN, 18));
-		lblNewLabel.setBounds(84, 26, 255, 28);
+		lblNewLabel.setBounds(97, 26, 255, 28);
 		contentPane.add(lblNewLabel);
 		
 		nomeUsuario = new JTextField();
-		nomeUsuario.setBounds(118, 107, 192, 20);
+		nomeUsuario.setBounds(133, 107, 192, 20);
 		contentPane.add(nomeUsuario);
 		nomeUsuario.setColumns(10);
 		
 		JLabel textoUsuario = new JLabel("USUÁRIO");
 		textoUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 		textoUsuario.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textoUsuario.setBounds(84, 84, 255, 12);
+		textoUsuario.setBounds(97, 84, 255, 12);
 		contentPane.add(textoUsuario);
 		
 		senha = new JPasswordField();
-		senha.setBounds(118, 174, 192, 20);
+		senha.setBounds(133, 183, 192, 20);
 		contentPane.add(senha);
 		
 		JLabel textoSenha = new JLabel("SENHA");
 		textoSenha.setHorizontalAlignment(SwingConstants.CENTER);
 		textoSenha.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textoSenha.setBounds(84, 151, 255, 12);
+		textoSenha.setBounds(97, 151, 255, 12);
 		contentPane.add(textoSenha);
 		
 		btnSignin = new JButton("SING IN");
-		btnSignin.setBounds(150, 214, 127, 23);
+		btnSignin.setBounds(164, 226, 127, 23);
 		contentPane.add(btnSignin);
 		
 		btnSignin.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){
 				try {
-					usuarioController.cadastrarDados("ADMINISTRADOR", nomeUsuario, senha);
+					usuarioController.cadastrarDados("Administrador", nomeUsuario, senha);
 					
 					JOptionPane.showMessageDialog(contentPane, "ADMINISTRADOR ADICIONADO COM SUCESSO");
 					

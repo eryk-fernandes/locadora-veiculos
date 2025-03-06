@@ -21,8 +21,9 @@ public class GerenteView extends JFrame {
 	private JButton btnRelatorio;
 
 	public GerenteView() {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 470, 330);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -31,7 +32,7 @@ public class GerenteView extends JFrame {
 		
 		JLabel textoGerente = new JLabel("GERENTE");
 		textoGerente.setHorizontalAlignment(SwingConstants.CENTER);
-		textoGerente.setFont(new Font("Verdana", Font.PLAIN, 18));
+		textoGerente.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		textoGerente.setBounds(112, 28, 214, 23);
 		contentPane.add(textoGerente);
 		
@@ -42,7 +43,7 @@ public class GerenteView extends JFrame {
 		btnCliente.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){
-				new CadastroClienteView().setVisible(true);;
+				new ClienteView().setVisible(true);;
 			}
 		});
 
@@ -54,7 +55,7 @@ public class GerenteView extends JFrame {
 		btnVeiculo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){
-				new CadastroVeiculoView().setVisible(true);;
+				new VeiculoView().setVisible(true);;
 			}
 		});
 		

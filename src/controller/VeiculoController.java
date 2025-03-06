@@ -1,6 +1,11 @@
 package controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
+
+import javax.swing.JTextField;
 
 import dao.VeiculoDAO;
 import model.Caminhao;
@@ -17,6 +22,10 @@ public class VeiculoController {
 		
 	}
 	
+	public List<Veiculo> recuperarTodos() throws Exception {
+		return new VeiculoDAO().recuperarTodos();
+	}
+	
 	public void salvar() throws Exception {
 		new VeiculoDAO().salvar(veiculo);
 	}
@@ -29,22 +38,41 @@ public class VeiculoController {
 		new VeiculoDAO().atualizar(veiculo);
 	}
 	
-
-	public void cadastrarDados(String tipo, String placa, String modelo, String ano, String status) throws Exception {
+	public String[] recuperarTodosComboBox() {
+		
+		List<String> veiculos = new ArrayList<>();
+		
+		try {
+			for (Veiculo veiculo : recuperarTodos()) {
+				veiculos.add(veiculo.getPlaca());
+			}
+		} catch (Exception e) {
+			
+		}
+		
+		if (veiculos.size() == 0) {
+			return new String[] {"NENHUM VEÍCULO ADICIONADO"};
+		}
+			
+		
+		return veiculos.toArray(new String[veiculos.size()]);
+	}
+	
+	public void cadastrarDados(String tipo, JTextField placa, JTextField modelo, JTextField ano, String status) throws Exception {
 		
 		if (tipo.equals("CARRO"))
-			this.veiculo = new Carro();
+			veiculo = new Carro();
 		else if (tipo.equals("MOTO"))
-			this.veiculo = new Moto();
+			veiculo = new Moto();
 		else if (tipo.equals("CAMINHAO"))
-			this.veiculo = new Caminhao();
+			veiculo = new Caminhao();
 		else
 			throw new IllegalArgumentException();
 		
 		try {
-			veiculo.setPlaca(placa);
-			veiculo.setModelo(modelo);
-			veiculo.setAno(Integer.valueOf(ano));
+			veiculo.setPlaca(placa.getText());
+			veiculo.setModelo(modelo.getText());
+			veiculo.setAno(Integer.valueOf(ano.getText()));
 			veiculo.setStatus(StatusLocacao.valueOf(status));
 		}
 		catch (InputMismatchException e) {
@@ -54,7 +82,7 @@ public class VeiculoController {
 		try {
 			salvar();
 		} catch (Exception e) {
-			throw e;
+			throw new IOException("ERRO AO ADICIONAR O USUÁRIO");
 		}
 	}
 

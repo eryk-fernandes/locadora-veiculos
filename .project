@@ -20,4 +20,10 @@
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<variableList>
+		<variable>
+			<name>json</name>
+			<value>file:/C:/Users/Admin/eclipse-workspace/locadora-veiculos/src/json</value>
+		</variable>
+	</variableList>
 </projectDescription>

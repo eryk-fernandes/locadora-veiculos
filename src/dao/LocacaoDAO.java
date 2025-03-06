@@ -48,7 +48,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 			
 			GsonBuilder gsonBuilder = new GsonBuilder();
 			gsonBuilder.
-				registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>()).
+				registerTypeAdapter(Veiculo.class, new SerializadorModel<Veiculo>()).
 				registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
 				
 			Gson gson = gsonBuilder.create();
@@ -80,7 +80,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 		
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.
-			registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>()).
+			registerTypeAdapter(Veiculo.class, new SerializadorModel<Veiculo>()).
 			registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
 			
 		Gson gson = gsonBuilder.create();
@@ -114,7 +114,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 		
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.
-			registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>()).
+			registerTypeAdapter(Veiculo.class, new SerializadorModel<Veiculo>()).
 			registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
 			
 		Gson gson = gsonBuilder.create();
@@ -153,7 +153,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 		
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.
-			registerTypeAdapter(Veiculo.class, new Serializador<Veiculo>()).
+			registerTypeAdapter(Veiculo.class, new SerializadorModel<Veiculo>()).
 			registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
 			
 		Gson gson = gsonBuilder.create();
