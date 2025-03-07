@@ -18,7 +18,7 @@ import javax.swing.border.EmptyBorder;
 import controller.UsuarioController;
 import excecoes.UsuarioJaAdicionadoException;
 
-public class UsuarioView extends JFrame {
+public class CadastrarUsuarioView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -27,7 +27,7 @@ public class UsuarioView extends JFrame {
 	
 	private UsuarioController usuarioController = new UsuarioController();
 
-	public UsuarioView() {
+	public CadastrarUsuarioView() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(400, 200, 470, 330);
@@ -111,7 +111,7 @@ public class UsuarioView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e){
 				setVisible(false);
-				new LoginView().setVisible(true);
+				new AdministradorView().setVisible(true);
 			}
 		});
 	}

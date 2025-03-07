@@ -22,9 +22,6 @@ public class LoginView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField nomeUsuario;
-	private JPasswordField senha;
-	private JButton btnEntrar;
 	
 	private UsuarioController usuarioController = new UsuarioController();
 
@@ -62,17 +59,17 @@ public class LoginView extends JFrame {
 		textoUsuario.setBounds(82, 96, 261, 20);
 		contentPane.add(textoUsuario);
 		
-		nomeUsuario = new JTextField();
+		JTextField nomeUsuario = new JTextField();
 		nomeUsuario.setBounds(124, 127, 180, 20);
 		contentPane.add(nomeUsuario);
 		nomeUsuario.setColumns(10);
 		
-		senha = new JPasswordField();
+		JPasswordField senha = new JPasswordField();
 		senha.setBounds(124, 189, 180, 20);
 		senha.setColumns(10);
 		contentPane.add(senha);
 		
-		btnEntrar = new JButton("ENTRAR");
+		JButton btnEntrar = new JButton("ENTRAR");
 		btnEntrar.setBounds(124, 232, 180, 23);
 		contentPane.add(btnEntrar);
 		
@@ -87,7 +84,7 @@ public class LoginView extends JFrame {
 					String tipo = usuarioController.retornarTipoUsuario(nomeUsuario);
 					
 					if (tipo.equals("Administrador")) {
-						new UsuarioView().setVisible(true);;
+						new AdministradorView().setVisible(true);;
 					}
 					else if (tipo.equals("Gerente")) {
 						new GerenteView().setVisible(true);
@@ -111,6 +108,6 @@ public class LoginView extends JFrame {
 			}
 			
 		});
-		
 	}
+
 }

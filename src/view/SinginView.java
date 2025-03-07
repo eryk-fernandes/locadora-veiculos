@@ -75,7 +75,7 @@ public class SinginView extends JFrame {
 					JOptionPane.showMessageDialog(contentPane, "ADMINISTRADOR ADICIONADO COM SUCESSO");
 					
 					setVisible(false);
-					new LoginView().setVisible(true);
+					new AdministradorView().setVisible(true);
 					
 				} catch (Exception f) {
 					f.printStackTrace();
