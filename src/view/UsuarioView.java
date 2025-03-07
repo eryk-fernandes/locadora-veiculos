@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,14 +24,13 @@ public class UsuarioView extends JFrame {
 	private JPanel contentPane;
 	private JPasswordField senha;
 	private JTextField usuario;
-	private String tipo;
 	
 	private UsuarioController usuarioController = new UsuarioController();
 
 	public UsuarioView() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 470, 330);
+		setBounds(400, 200, 470, 330);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -40,92 +40,78 @@ public class UsuarioView extends JFrame {
 		JLabel textoSenha = new JLabel("SENHA");
 		textoSenha.setHorizontalAlignment(SwingConstants.CENTER);
 		textoSenha.setFont(new Font("Verdana", Font.PLAIN, 15));
-		textoSenha.setBounds(232, 173, 184, 14);
+		textoSenha.setBounds(130, 191, 184, 14);
 		contentPane.add(textoSenha);
 		
 		JLabel textoUsuario = new JLabel("USUÁRIO");
 		textoUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 		textoUsuario.setFont(new Font("Verdana", Font.PLAIN, 15));
-		textoUsuario.setBounds(232, 96, 184, 14);
+		textoUsuario.setBounds(130, 135, 184, 14);
 		contentPane.add(textoUsuario);
 		
 		JLabel textoTipoUsuario = new JLabel("TIPO DE USUÁRIO");
 		textoTipoUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 		textoTipoUsuario.setFont(new Font("Verdana", Font.PLAIN, 15));
-		textoTipoUsuario.setBounds(38, 96, 184, 14);
+		textoTipoUsuario.setBounds(130, 78, 184, 14);
 		contentPane.add(textoTipoUsuario);
 		
 		JLabel textoCadastrarUsuario = new JLabel("CADASTRAR USUÁRIO");
 		textoCadastrarUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 		textoCadastrarUsuario.setFont(new Font("Verdana", Font.PLAIN, 18));
-		textoCadastrarUsuario.setBounds(108, 24, 244, 43);
+		textoCadastrarUsuario.setBounds(99, 11, 244, 43);
 		contentPane.add(textoCadastrarUsuario);
 		
 		senha = new JPasswordField();
-		senha.setBounds(232, 198, 184, 20);
+		senha.setBounds(130, 216, 184, 20);
 		contentPane.add(senha);
 		
 		usuario = new JTextField();
-		usuario.setBounds(232, 133, 184, 20);
+		usuario.setBounds(130, 160, 184, 20);
 		contentPane.add(usuario);
 		usuario.setColumns(10);
 		
-		JButton btnAdministrador = new JButton("ADMINISTRADOR");
-		btnAdministrador.setBounds(63, 132, 135, 23);
-		contentPane.add(btnAdministrador);
-		
-		btnAdministrador.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				tipo = "Administrador";
-			}
-		});
-		
-		JButton btnGerente = new JButton("GERENTE");
-		btnGerente.setBounds(63, 164, 135, 23);
-		contentPane.add(btnGerente);
-		
-		btnGerente.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				tipo = "Gerente";
-			}
-		});
-		
-		JButton btnAtendente = new JButton("ATENDENTE");
-		btnAtendente.setBounds(63, 197, 135, 23);
-		contentPane.add(btnAtendente);
-		
-		btnAtendente.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				tipo = "Atendente";
-			}
-		});
-		
 		JButton btnCadastrar = new JButton("CADASTRAR");
-		btnCadastrar.setBounds(130, 255, 184, 23);
+		btnCadastrar.setBounds(130, 257, 184, 23);
 		contentPane.add(btnCadastrar);
+		
+		JComboBox<String> cbTipoUsuario = new JComboBox<String>();
+		cbTipoUsuario.setBounds(130, 102, 184, 22);
+		contentPane.add(cbTipoUsuario);
+		
+		cbTipoUsuario.addItem("");
+		cbTipoUsuario.addItem("Administrador");
+		cbTipoUsuario.addItem("Gerente");
+		cbTipoUsuario.addItem("Atendente");
 		
 		btnCadastrar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){
 				try {
-					usuarioController.cadastrarDados(tipo, usuario, senha);
+					usuarioController.cadastrarDados(cbTipoUsuario.getSelectedItem(), usuario, senha);
 					
 					JOptionPane.showMessageDialog(contentPane, "USUÁRIO ADICIONADO COM SUCESSO");
-					
-					tipo = null;
 				}
-				catch (UsuarioJaAdicionadoException e1) {
-					JOptionPane.showMessageDialog(contentPane, e1.getMessage());
+				catch (UsuarioJaAdicionadoException exception) {
+					JOptionPane.showMessageDialog(contentPane, exception.getMessage());
 				}
-				catch (IllegalArgumentException e1) {
-					JOptionPane.showMessageDialog(contentPane, e1.getMessage());
+				catch (IllegalArgumentException exception) {
+					JOptionPane.showMessageDialog(contentPane, exception.getMessage());
 				}
-				catch (Exception e1) {
+				catch (Exception exception) {
 					JOptionPane.showMessageDialog(contentPane, "ERRO AO ADICIONAR USUÁRIO");
 				}
+			}
+		});
+		
+		JButton btnVoltar = new JButton("VOLTAR");
+		btnVoltar.setBounds(339, 257, 89, 23);
+		contentPane.add(btnVoltar);
+		
+		btnVoltar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e){
+				setVisible(false);
+				new LoginView().setVisible(true);
 			}
 		});
 	}

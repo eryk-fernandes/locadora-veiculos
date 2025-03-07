@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.JTextField;
 
 import dao.ClienteDAO;
+import excecoes.TamanhoInvalidoException;
 import model.Cliente;
 
 public class ClienteController {
@@ -48,7 +49,8 @@ public class ClienteController {
 		if (clientes.size() == 0) {
 			return new String[] {"NENHUM CLIENTE ADICIONADO"};
 		}
-			
+		
+		clientes.add("");
 		
 		return clientes.toArray(new String[clientes.size()]);
 	}
@@ -56,6 +58,10 @@ public class ClienteController {
 	public void cadastrarDados(JTextField nome, JTextField cpf, JTextField telefone, JTextField email) throws Exception {
 		
 		cliente = new Cliente();
+		
+		if (cpf.getText().replace("-", "").replace(".", "").replace(" ", "").length() != 11) {
+			throw new TamanhoInvalidoException("TAMANHO DE CPF INVÁLIDO");
+		}
 		
 		cliente.setNome(nome.getText());
 		cliente.setCpf(cpf.getText().replace("-", "").replace(".", "").replace(" ", ""));

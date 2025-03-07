@@ -23,7 +23,7 @@ public class GerenteView extends JFrame {
 	public GerenteView() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 470, 330);
+		setBounds(400, 200, 470, 330);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -62,5 +62,17 @@ public class GerenteView extends JFrame {
 		btnRelatorio = new JButton("VISUALIZAR RELATÓRIO");
 		btnRelatorio.setBounds(112, 206, 214, 29);
 		contentPane.add(btnRelatorio);
+		
+		JButton btnVoltar = new JButton("VOLTAR");
+		btnVoltar.setBounds(339, 257, 89, 23);
+		contentPane.add(btnVoltar);
+		
+		btnVoltar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e){
+				setVisible(false);
+				new LoginView().setVisible(true);
+			}
+		});
 	}
 }

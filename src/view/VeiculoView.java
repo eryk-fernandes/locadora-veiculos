@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,21 +23,14 @@ public class VeiculoView extends JFrame {
 	private JTextField placa;
 	private JTextField modelo;
 	private JTextField ano;
-	private String tipo;
-	private String status;
 	private JButton btnCadastrar;
-	private JButton btnLocado;
-	private JButton btnDisponivel;
-	private JButton btnCarro;
-	private JButton btnMoto;
-	private JButton btnCaminhao;
 	
 	private VeiculoController veiculoController = new VeiculoController();
 
 	public VeiculoView() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 470, 330);
+		setBounds(400, 200, 470, 330);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -51,118 +45,94 @@ public class VeiculoView extends JFrame {
 		
 		JLabel textoPlaca = new JLabel("PLACA");
 		textoPlaca.setHorizontalAlignment(SwingConstants.CENTER);
-		textoPlaca.setBounds(29, 60, 184, 14);
+		textoPlaca.setBounds(29, 78, 184, 14);
 		contentPane.add(textoPlaca);
 		
 		JLabel textoModelo = new JLabel("MODELO");
 		textoModelo.setHorizontalAlignment(SwingConstants.CENTER);
-		textoModelo.setBounds(29, 116, 184, 14);
+		textoModelo.setBounds(29, 134, 184, 14);
 		contentPane.add(textoModelo);
 		
 		JLabel textoAno = new JLabel("ANO");
 		textoAno.setHorizontalAlignment(SwingConstants.CENTER);
-		textoAno.setBounds(29, 182, 184, 14);
+		textoAno.setBounds(29, 190, 184, 14);
 		contentPane.add(textoAno);
 		
 		JLabel textoLocacao = new JLabel("STATUS DE LOCAÇÃO");
 		textoLocacao.setHorizontalAlignment(SwingConstants.CENTER);
-		textoLocacao.setBounds(233, 182, 184, 14);
+		textoLocacao.setBounds(233, 162, 184, 14);
 		contentPane.add(textoLocacao);
 		
-		JLabel tipoDeVeiculo = new JLabel("TIPO DE VEÍCULO");
-		tipoDeVeiculo.setHorizontalAlignment(SwingConstants.CENTER);
-		tipoDeVeiculo.setBounds(233, 60, 184, 14);
-		contentPane.add(tipoDeVeiculo);
+		JLabel textotipoDeVeiculo = new JLabel("TIPO DE VEÍCULO");
+		textotipoDeVeiculo.setHorizontalAlignment(SwingConstants.CENTER);
+		textotipoDeVeiculo.setBounds(233, 78, 184, 14);
+		contentPane.add(textotipoDeVeiculo);
 		
 		placa = new JTextField();
-		placa.setBounds(29, 85, 184, 20);
+		placa.setBounds(29, 103, 184, 20);
 		contentPane.add(placa);
 		placa.setColumns(10);
 		
 		modelo = new JTextField();
 		modelo.setColumns(10);
-		modelo.setBounds(29, 141, 184, 20);
+		modelo.setBounds(29, 159, 184, 20);
 		contentPane.add(modelo);
 		
 		ano = new JTextField();
 		ano.setColumns(10);
-		ano.setBounds(29, 207, 184, 20);
+		ano.setBounds(29, 216, 184, 20);
 		contentPane.add(ano);
-
-		btnDisponivel = new JButton("DISPONÍVEL");
-		btnDisponivel.setFont(new Font("Tahoma", Font.PLAIN, 8));
-		btnDisponivel.setBounds(233, 207, 89, 23);
-		contentPane.add(btnDisponivel);
 		
-		btnDisponivel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				status = "DISPONIVEL";
-			}
-		});
+		JComboBox<String> cbTipoVeiculo = new JComboBox<String>();
+		cbTipoVeiculo.setBounds(256, 103, 134, 22);
+		contentPane.add(cbTipoVeiculo);
 		
-		btnLocado = new JButton("LOCADO");
-		btnLocado.setFont(new Font("Tahoma", Font.PLAIN, 8));
-		btnLocado.setBounds(331, 207, 89, 23);
-		contentPane.add(btnLocado);
+		cbTipoVeiculo.addItem("");
+		cbTipoVeiculo.addItem("Carro");
+		cbTipoVeiculo.addItem("Moto");
+		cbTipoVeiculo.addItem("Caminhão");
 		
-		btnLocado.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				status = "LOCADO";
-			}
-		});
+		JComboBox<String> cbStatusLocacao = new JComboBox<String>();
+		cbStatusLocacao.setBounds(256, 200, 134, 22);
+		contentPane.add(cbStatusLocacao);
+		
+		cbStatusLocacao.addItem("");
+		cbStatusLocacao.addItem("Disponível");
+		cbStatusLocacao.addItem("Locado");
 		
 		btnCadastrar = new JButton("CADASTRAR VEÍCULO");
-		btnCadastrar.setBounds(130, 257, 192, 23);
+		btnCadastrar.setBounds(101, 257, 192, 23);
 		contentPane.add(btnCadastrar);
 		
 		btnCadastrar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){
 				try {
-					veiculoController.cadastrarDados(tipo, placa, modelo, ano, status);
+					veiculoController.cadastrarDados(cbTipoVeiculo.getSelectedItem(), placa, modelo, ano, cbStatusLocacao.getSelectedItem());
 					
 					JOptionPane.showMessageDialog(contentPane, "VEÍCULO ADICIONADO COM SUCESSO");
 					
 					setVisible(false);
 					
-				} catch (Exception f) {
-					JOptionPane.showMessageDialog(contentPane, "ARGUMENTO INVÁLIDO");
+				}
+				catch (IllegalArgumentException exception) {
+					JOptionPane.showMessageDialog(contentPane, exception.getMessage());
+				}
+				catch (Exception exception) {
+					JOptionPane.showMessageDialog(contentPane, "ERRO AO ADICIONAR VEÍCULO");
 				}
 			}
 		});
 		
-		btnCarro = new JButton("CARRO");
-		btnCarro.setBounds(233, 84, 184, 23);
-		contentPane.add(btnCarro);
+		JButton btnVoltar = new JButton("VOLTAR");
+		btnVoltar.setBounds(339, 257, 89, 23);
+		contentPane.add(btnVoltar);
 		
-		btnCarro.addActionListener(new ActionListener() {
+		btnVoltar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){
-				tipo = "CARRO";
-			}
-		});
-		
-		btnMoto = new JButton("MOTO");
-		btnMoto.setBounds(233, 112, 184, 23);
-		contentPane.add(btnMoto);
-		
-		btnMoto.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				tipo = "MOTO";
-			}
-		});
-		
-		btnCaminhao = new JButton("CAMINHÃO");
-		btnCaminhao.setBounds(233, 140, 184, 23);
-		contentPane.add(btnCaminhao);
-		
-		btnCaminhao.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				tipo = "CAMINHAO";
+				setVisible(false);
+				new GerenteView().setVisible(true);
 			}
 		});
 	}

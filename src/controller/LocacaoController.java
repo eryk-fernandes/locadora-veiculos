@@ -1,8 +1,12 @@
 package controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JFormattedTextField;
 
 import dao.ClienteDAO;
 import dao.LocacaoDAO;
@@ -43,31 +47,43 @@ public class LocacaoController {
 		
 		try {
 			for (Locacao locacao : recuperarTodos()) {
-				locacoes.add(locacao.getId() + " " + locacao.getCliente().getCpf() + " " + locacao.getVeiculo().getPlaca());
+				StringBuilder texto = new StringBuilder();
+				
+				texto.append("ID: " + locacao.getId() + ". ");
+				texto.append("CPF: " + locacao.getCliente().getCpf() + ". ");
+				texto.append("PLACA: " + locacao.getVeiculo().getPlaca());
+				
+				locacoes.add(texto.toString());
 			}
 		} catch (Exception e) {
 			
 		}
 		
 		if (locacoes.size() == 0) {
-			return new String[] {"NENHUMA LOCAÇÃO ADICIONADO"};
+			return new String[] {"NENHUMA LOCAÇÃO ADICIONADA"};
 		}
-			
+		
+		locacoes.add("");
 		
 		return locacoes.toArray(new String[locacoes.size()]);
 	}
 	
-	public void cadastrarDados(Object clienteCpf, Object veiculoPlaca) throws Exception {
+	public void cadastrarDados(Object clienteCpf, Object veiculoPlaca, JFormattedTextField devolucao) throws Exception {
 		
 		locacao = new Locacao();
 		
 		locacao.setId(gerarId());
-		
-		System.out.println(new ClienteDAO().recuperar(clienteCpf.toString()));
-		
 		locacao.setCliente(new ClienteDAO().recuperar(clienteCpf.toString()));
 		locacao.setVeiculo(new VeiculoDAO().recuperar(veiculoPlaca.toString()));
+		locacao.setRetirada(LocalDate.now());
 		
+		try {
+			locacao.setDevolucao(LocalDate.parse(devolucao.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+		}
+		catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("DATA INVÁLIDA");
+		}
+
 		try {
 			salvar();
 		} catch (Exception e) {
@@ -77,11 +93,11 @@ public class LocacaoController {
 	
 	public int gerarId() throws Exception {
 		
-		if (recuperarTodos().size() == 0) {
-			return 100;
-		}
-		
 		int id = 100;
+		
+		if (recuperarTodos() == null) {
+			return id;
+		}
 		
 		for (Locacao locacao : recuperarTodos()) {
 			if (locacao.getId() == id) {

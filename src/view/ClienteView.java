@@ -14,6 +14,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controller.ClienteController;
+import excecoes.TamanhoInvalidoException;
 
 public class ClienteView extends JFrame {
 
@@ -29,7 +30,7 @@ public class ClienteView extends JFrame {
 	public ClienteView() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 470, 330);
+		setBounds(400, 200, 470, 330);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -96,9 +97,25 @@ public class ClienteView extends JFrame {
 					
 					setVisible(false);
 					
-				} catch (Exception e1) {
+				} 
+				catch (TamanhoInvalidoException exception) {
+					JOptionPane.showMessageDialog(contentPane, exception.getMessage());
+				}
+				catch (Exception exception) {
 					JOptionPane.showMessageDialog(contentPane, "ERRO AO ADICIONAR CLIENTE");
 				}
+			}
+		});
+		
+		JButton btnVoltar = new JButton("VOLTAR");
+		btnVoltar.setBounds(339, 257, 89, 23);
+		contentPane.add(btnVoltar);
+		
+		btnVoltar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e){
+				setVisible(false);
+				new GerenteView().setVisible(true);
 			}
 		});
 		

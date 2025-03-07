@@ -64,20 +64,24 @@ public class UsuarioController {
 
 	}
 
-	public void cadastrarDados(String tipo, JTextField nomeUsuario, JPasswordField senha) throws Exception {
+	public void cadastrarDados(Object tipo, JTextField nomeUsuario, JPasswordField senha) throws Exception {
 
 		if (recuperar(nomeUsuario.getText()) != null) {
 			throw new UsuarioJaAdicionadoException("USUÁRIO JÁ ADICIONADO");
 		}
 		
-		if (tipo == null)
-			throw new IllegalArgumentException("ESCOLHA UMA DAS OPÇÕES DE USUÁRIO");
-		else if (tipo.equals("Administrador"))
+		if (tipo.toString().equals("Administrador")) {
 			usuario = new Administrador();
-		else if (tipo.equals("Gerente"))
+		}
+		else if (tipo.toString().equals("Gerente")) {
 			usuario = new Gerente();
-		else
+		}
+		else if (tipo.toString().equals("Atendente")) {
 			usuario = new Atendente();
+		}
+		else {
+			throw new IllegalArgumentException("ESCOLHA UMA DAS OPÇÕES DE USUÁRIO");
+		}
 
 		usuario.setNomeUsuario(nomeUsuario.getText());
 		usuario.setSenha(String.valueOf(senha.getPassword()));
