@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -14,7 +15,7 @@ import model.Cliente;
 
 public class ClienteDAO implements Persistencia<Cliente, String> {
 	
-	private static final String CAMINHO_JSON = "src/json/clientes.json";
+	private static final String CAMINHO_JSON = "dados/clientes.json";
 
 	@Override
 	public Cliente recuperar(String cpf) throws IOException {
@@ -51,6 +52,8 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 			clientes = new Gson().fromJson(fr, tipo);
 			
 		}
+		
+		Collections.sort(clientes);
 		
 		return clientes;
 	}

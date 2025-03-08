@@ -34,7 +34,7 @@ public class ClienteController {
 		new ClienteDAO().atualizar(cliente);
 	}
 	
-	public String[] recuperarTodosComboBox() {
+	public String[] criarListaCPFs() {
 		
 		List<String> clientes = new ArrayList<>();
 		
@@ -49,8 +49,6 @@ public class ClienteController {
 		if (clientes.size() == 0) {
 			return new String[] {"NENHUM CLIENTE ADICIONADO"};
 		}
-		
-		clientes.add("");
 		
 		return clientes.toArray(new String[clientes.size()]);
 	}

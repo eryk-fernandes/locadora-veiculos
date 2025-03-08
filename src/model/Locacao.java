@@ -2,7 +2,7 @@ package model;
 
 import java.time.LocalDate;
 
-public class Locacao {
+public class Locacao implements Comparable<Locacao> {
 	
 	protected Integer id;
 	private Cliente cliente;
@@ -60,6 +60,11 @@ public class Locacao {
 
 	public void setDevolucao(LocalDate devolucao) {
 		this.devolucao = devolucao;
+	}
+	
+	@Override
+	public int compareTo(Locacao outro) {
+		return getId().compareTo(outro.getId());
 	}
 	
 }

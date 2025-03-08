@@ -14,7 +14,7 @@ import model.Pagamento;
 
 public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 	
-	private static final String CAMINHO_JSON = "src/json/pagamentos.json";
+	private static final String CAMINHO_JSON = "dados/pagamentos.json";
 
 	@Override
 	public Pagamento recuperar(Integer id) throws IOException {

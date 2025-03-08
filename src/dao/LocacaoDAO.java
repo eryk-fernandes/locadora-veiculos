@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -16,7 +17,7 @@ import model.Veiculo;
 
 public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 	
-	private static final String CAMINHO_JSON = "src/json/locacoes.json";
+	private static final String CAMINHO_JSON = "dados/locacoes.json";
 
 	@Override
 	public Locacao recuperar(Integer id) throws IOException {
@@ -55,6 +56,8 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 
 			locacoes = gson.fromJson(fr, new TypeToken<ArrayList<Locacao>>(){}.getType());
 		}
+		
+		Collections.sort(locacoes);
 		
 		return locacoes;
 	}

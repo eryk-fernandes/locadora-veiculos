@@ -1,8 +1,6 @@
 package view;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,14 +9,16 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-public class GerenteView extends JFrame {
+public class GerenteView extends JFrame implements BotaoListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	
-	private JButton btnCliente;
+	private JButton btnRemover;
+	private JButton btnGerenciar;
+	private JButton btnCadastrar;
 	private JButton btnVeiculo;
 	private JButton btnRelatorio;
+	private JButton btnVoltar;
 
 	public GerenteView() {
 		setResizable(false);
@@ -33,46 +33,60 @@ public class GerenteView extends JFrame {
 		JLabel textoGerente = new JLabel("GERENTE");
 		textoGerente.setHorizontalAlignment(SwingConstants.CENTER);
 		textoGerente.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		textoGerente.setBounds(112, 28, 214, 23);
+		textoGerente.setBounds(0, 28, 454, 23);
 		contentPane.add(textoGerente);
 		
-		btnCliente = new JButton("CADASTRAR CLIENTE");
-		btnCliente.setBounds(112, 93, 214, 29);
-		contentPane.add(btnCliente);
-		
-		btnCliente.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				new ClienteView().setVisible(true);;
-			}
-		});
-
+		btnCadastrar = new JButton("CADASTRAR CLIENTE");
+		btnCadastrar.setBounds(123, 62, 214, 29);
+		contentPane.add(btnCadastrar);
 		
 		btnVeiculo = new JButton("CADASTRAR VEÍCULO");
-		btnVeiculo.setBounds(112, 149, 214, 29);
+		btnVeiculo.setBounds(123, 142, 214, 29);
 		contentPane.add(btnVeiculo);
-
-		btnVeiculo.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				new VeiculoView().setVisible(true);;
-			}
-		});
 		
 		btnRelatorio = new JButton("VISUALIZAR RELATÓRIO");
-		btnRelatorio.setBounds(112, 206, 214, 29);
+		btnRelatorio.setBounds(123, 217, 214, 29);
 		contentPane.add(btnRelatorio);
 		
-		JButton btnVoltar = new JButton("VOLTAR");
+		btnVoltar = new JButton("VOLTAR");
 		btnVoltar.setBounds(339, 257, 89, 23);
 		contentPane.add(btnVoltar);
 		
-		btnVoltar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				setVisible(false);
-				new LoginView().setVisible(true);
-			}
+		btnGerenciar = new JButton("GERENCIAR CLIENTES");
+		btnGerenciar.setBounds(123, 102, 214, 29);
+		contentPane.add(btnGerenciar);
+		
+		btnRemover = new JButton("REMOVER VEÍCULO");
+		btnRemover.setBounds(123, 180, 214, 29);
+		contentPane.add(btnRemover);
+		
+		botaoListener();
+	}
+
+	@Override
+	public void botaoListener() {
+		
+		btnCadastrar.addActionListener(e -> {
+			new CadastrarClienteView().setVisible(true);;
+		});
+		
+		btnVeiculo.addActionListener(e -> {
+			new VeiculoView().setVisible(true);;
+		});
+		
+		btnRemover.addActionListener(e -> {
+			new RemoverVeiculoView().setVisible(true);;
+		});
+		
+		btnGerenciar.addActionListener(e -> {
+			new GerenciarClientesView().setVisible(true);;
+		});
+		
+		btnVoltar.addActionListener(e -> {
+			setVisible(false);
+			new LoginView().setVisible(true);
 		});
 	}
+	
+	
 }

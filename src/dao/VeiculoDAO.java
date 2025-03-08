@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -14,7 +15,7 @@ import model.Veiculo;
 
 public class VeiculoDAO implements Persistencia<Veiculo, String> {
 	
-	private static final String CAMINHO_JSON = "src/json/veiculos.json";
+	private static final String CAMINHO_JSON = "dados/veiculos.json";
 	
 	@Override
 	public Veiculo recuperar(String placa) throws IOException {
@@ -52,6 +53,8 @@ public class VeiculoDAO implements Persistencia<Veiculo, String> {
 			
 			veiculos = gson.fromJson(fr, new TypeToken<ArrayList<Veiculo>>(){}.getType());
 		}
+		
+		Collections.sort(veiculos);
 		
 		return veiculos;
 	}
@@ -140,12 +143,14 @@ public class VeiculoDAO implements Persistencia<Veiculo, String> {
 			}
 		}
 		
+		Collections.sort(veiculosNovo);
+		
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(Veiculo.class, new SerializadorModel<Veiculo>());
 		
 		Gson gson = gsonBuilder.create();
 		
-		String json = gson.toJson(veiculos, new TypeToken<ArrayList<Veiculo>>(){}.getType());
+		String json = gson.toJson(veiculosNovo, new TypeToken<ArrayList<Veiculo>>(){}.getType());
 		
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);

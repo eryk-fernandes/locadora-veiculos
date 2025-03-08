@@ -1,8 +1,6 @@
 package view;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,10 +16,13 @@ import controller.UsuarioController;
 import excecoes.SenhaIncorretaException;
 import excecoes.UsuarioNaoEncontradoException;
 
-public class LoginView extends JFrame {
+public class LoginView extends JFrame implements BotaoListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JTextField nomeUsuario;
+	private JPasswordField senha;
+	private JButton btnEntrar;
 	
 	private UsuarioController usuarioController = new UsuarioController();
 
@@ -38,76 +39,83 @@ public class LoginView extends JFrame {
 		JLabel textoLocadora = new JLabel("LOCADORA DE VEÍCULOS");
 		textoLocadora.setHorizontalAlignment(SwingConstants.CENTER);
 		textoLocadora.setFont(new Font("Verdana", Font.PLAIN, 20));
-		textoLocadora.setBounds(82, 11, 261, 20);
+		textoLocadora.setBounds(0, 11, 454, 20);
 		contentPane.add(textoLocadora);
 		
 		JLabel textoLogin = new JLabel("LOGIN DE USUÁRIOS");
 		textoLogin.setHorizontalAlignment(SwingConstants.CENTER);
 		textoLogin.setFont(new Font("Verdana", Font.PLAIN, 15));
-		textoLogin.setBounds(82, 53, 261, 20);
+		textoLogin.setBounds(0, 52, 454, 20);
 		contentPane.add(textoLogin);
 		
 		JLabel textoSenha = new JLabel("SENHA");
 		textoSenha.setHorizontalAlignment(SwingConstants.CENTER);
 		textoSenha.setFont(new Font("Verdana", Font.PLAIN, 15));
-		textoSenha.setBounds(82, 158, 261, 20);
+		textoSenha.setBounds(0, 158, 454, 20);
 		contentPane.add(textoSenha);
 		
 		JLabel textoUsuario = new JLabel("USUÁRIO");
 		textoUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 		textoUsuario.setFont(new Font("Verdana", Font.PLAIN, 15));
-		textoUsuario.setBounds(82, 96, 261, 20);
+		textoUsuario.setBounds(0, 96, 454, 20);
 		contentPane.add(textoUsuario);
 		
-		JTextField nomeUsuario = new JTextField();
-		nomeUsuario.setBounds(124, 127, 180, 20);
+		nomeUsuario = new JTextField();
+		nomeUsuario.setHorizontalAlignment(SwingConstants.CENTER);
+		nomeUsuario.setBounds(136, 127, 180, 20);
 		contentPane.add(nomeUsuario);
 		nomeUsuario.setColumns(10);
 		
-		JPasswordField senha = new JPasswordField();
-		senha.setBounds(124, 189, 180, 20);
+		senha = new JPasswordField();
+		senha.setHorizontalAlignment(SwingConstants.CENTER);
+		senha.setBounds(136, 189, 180, 20);
 		senha.setColumns(10);
 		contentPane.add(senha);
 		
-		JButton btnEntrar = new JButton("ENTRAR");
-		btnEntrar.setBounds(124, 232, 180, 23);
+		btnEntrar = new JButton("ENTRAR");
+		btnEntrar.setBounds(136, 231, 180, 23);
 		contentPane.add(btnEntrar);
 		
-		btnEntrar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					usuarioController.verificarUsuario(nomeUsuario, senha);
+		botaoListener();
+		
+	}
+
+	@Override
+	public void botaoListener() {
+		
+		btnEntrar.addActionListener(e -> {
+			try {
+				usuarioController.verificarUsuario(nomeUsuario, senha);
 					
-					JOptionPane.showMessageDialog(contentPane, "USUÁRIO E SENHA CORRETOS");
+				JOptionPane.showMessageDialog(contentPane, "USUÁRIO E SENHA CORRETOS");
 					
-					String tipo = usuarioController.retornarTipoUsuario(nomeUsuario);
+				String tipo = usuarioController.retornarTipoUsuario(nomeUsuario);
 					
-					if (tipo.equals("Administrador")) {
-						new AdministradorView().setVisible(true);;
-					}
-					else if (tipo.equals("Gerente")) {
-						new GerenteView().setVisible(true);
-					}
-					else {
-						new AtendenteView().setVisible(true);
-					}
-					
-					setVisible(false);
-					
+				if (tipo.equals("Administrador")) {
+					new UsuarioView().setVisible(true);;
 				}
-				catch (UsuarioNaoEncontradoException e1) {
-					JOptionPane.showMessageDialog(contentPane, e1.getMessage());
+				else if (tipo.equals("Gerente")) {
+					new GerenteView().setVisible(true);
 				}
-				catch (SenhaIncorretaException e1) {
-					JOptionPane.showMessageDialog(contentPane, e1.getMessage());
+				else {
+					new AtendenteView().setVisible(true);
 				}
-				catch (Exception e1) {
-					e1.printStackTrace();
-				} 
+					
+				setVisible(false);
 			}
+			catch (UsuarioNaoEncontradoException exception) {
+				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
+			}
+			catch (SenhaIncorretaException exception) {
+				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
+			}
+			catch (Exception exception) {
+				JOptionPane.showMessageDialog(contentPane, "ERRO AO EFETUAR LOGIN");
+			} 
 			
 		});
+		
 	}
+
 
 }

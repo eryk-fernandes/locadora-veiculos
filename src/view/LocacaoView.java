@@ -1,8 +1,6 @@
 package view;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.ParseException;
 
 import javax.swing.JButton;
@@ -19,15 +17,23 @@ import javax.swing.text.MaskFormatter;
 import controller.ClienteController;
 import controller.LocacaoController;
 import controller.VeiculoController;
+import excecoes.TamanhoInvalidoException;
+import excecoes.VeiculoLocadoException;
 
-public class LocacaoView extends JFrame {
+public class LocacaoView extends JFrame implements BotaoListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JFormattedTextField dataRetirada;
+	private JFormattedTextField dataDevolucao;
+	private JComboBox<String> clientes;
+	private JComboBox<String> veiculos;
+	private JButton btnCadastrar;
+	private JButton btnVoltar;
 	
-	private ClienteController clienteController = new ClienteController();
-	private VeiculoController veiculoController = new VeiculoController();
-	private LocacaoController locacaoController = new LocacaoController();
+	private static ClienteController clienteController = new ClienteController();
+	private static VeiculoController veiculoController = new VeiculoController();
+	private static LocacaoController locacaoController = new LocacaoController();
 
 	public LocacaoView() {
 		setResizable(false);
@@ -42,93 +48,119 @@ public class LocacaoView extends JFrame {
 		JLabel textoLocacao = new JLabel("CADASTRO DE LOCAÇÃO");
 		textoLocacao.setHorizontalAlignment(SwingConstants.CENTER);
 		textoLocacao.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		textoLocacao.setBounds(95, 22, 242, 23);
+		textoLocacao.setBounds(0, 22, 454, 23);
 		contentPane.add(textoLocacao);
 		
 		JLabel textoVeiculos = new JLabel("VEÍCULOS");
 		textoVeiculos.setHorizontalAlignment(SwingConstants.CENTER);
-		textoVeiculos.setBounds(153, 124, 121, 14); 
+		textoVeiculos.setBounds(234, 87, 179, 14); 
 		contentPane.add(textoVeiculos);
 		
 		JLabel textoClientes = new JLabel("CLIENTES");
 		textoClientes.setHorizontalAlignment(SwingConstants.CENTER);
-		textoClientes.setBounds(153, 66, 121, 14);
+		textoClientes.setBounds(76, 87, 121, 14);
 		contentPane.add(textoClientes);
 		
-		JLabel textoData = new JLabel("DATA DE DEVOLUÇÃO");
-		textoData.setHorizontalAlignment(SwingConstants.CENTER);
-		textoData.setBounds(153, 182, 121, 14);
-		contentPane.add(textoData);
+		JLabel textoRetirada = new JLabel("DATA DE RETIRADA");
+		textoRetirada.setHorizontalAlignment(SwingConstants.CENTER);
+		textoRetirada.setBounds(76, 164, 121, 14);
+		contentPane.add(textoRetirada);
 		
-		JFormattedTextField devolucao = new JFormattedTextField();
-		devolucao.setHorizontalAlignment(SwingConstants.CENTER);
-		devolucao.setBounds(153, 209, 121, 20);
-		contentPane.add(devolucao);
+		JLabel textoDevolucao = new JLabel("DATA DE DEVOLUÇÃO");
+		textoDevolucao.setHorizontalAlignment(SwingConstants.CENTER);
+		textoDevolucao.setBounds(257, 164, 121, 14);
+		contentPane.add(textoDevolucao);
+		
+		dataRetirada = new JFormattedTextField();
+		dataRetirada.setHorizontalAlignment(SwingConstants.CENTER);
+		dataRetirada.setBounds(76, 189, 121, 20);
+		contentPane.add(dataRetirada);
+		
+		dataDevolucao = new JFormattedTextField();
+		dataDevolucao.setHorizontalAlignment(SwingConstants.CENTER);
+		dataDevolucao.setBounds(257, 189, 121, 20);
+		contentPane.add(dataDevolucao);
 		
 		MaskFormatter mask;
 		try {
 			mask = new MaskFormatter("##/##/####");
-			mask.install(devolucao);
-		} catch (ParseException e1) {
+			mask.install(dataRetirada);
+			mask = new MaskFormatter("##/##/####");
+			mask.install(dataDevolucao);
+		}
+		catch (ParseException e1) {
 			e1.printStackTrace();
 		}
 		
-		JComboBox<String> cbClientes = new JComboBox<String>();
-		cbClientes.setBounds(153, 91, 121, 22);
-		contentPane.add(cbClientes);
+		clientes = new JComboBox<String>();
+		clientes.setBounds(76, 112, 121, 22);
 		
-		adicionarItensClientes(cbClientes);
+		clientes.addItem("");
+		for (String s : clienteController.criarListaCPFs())
+			clientes.addItem(s);
 		
-		JComboBox<String> cbVeiculos = new JComboBox<String>();
-		cbVeiculos.setBounds(153, 149, 121, 22);
-		contentPane.add(cbVeiculos);
+		contentPane.add(clientes);
 		
-		adicionarItensVeiculos(cbVeiculos);
+		veiculos = new JComboBox<String>();
+		veiculos.setBounds(234, 112, 179, 22);
 		
-		JButton btnCadastrar = new JButton("CADASTRAR LOCAÇÃO");
-		btnCadastrar.setBounds(141, 253, 167, 27);
+		veiculos.addItem("");
+		for (String s : veiculoController.criarListaPlacas())
+			veiculos.addItem(s);
+		
+		contentPane.add(veiculos);
+		
+		btnCadastrar = new JButton("CADASTRAR LOCAÇÃO");
+		btnCadastrar.setBounds(147, 255, 167, 27);
 		contentPane.add(btnCadastrar);
 		
-		btnCadastrar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				try {
-					
-					locacaoController.cadastrarDados(cbClientes.getSelectedItem(), cbVeiculos.getSelectedItem(), devolucao);
-					
-					JOptionPane.showMessageDialog(contentPane, "LOCAÇÃO ADICIONADO COM SUCESSO");
-					
-					setVisible(false);
-					
-				} catch (Exception exception) {
-					JOptionPane.showMessageDialog(contentPane, "ERRO AO ADICIONAR LOCAÇÃO");
-				}
-			}
-		});
-		
-		JButton btnVoltar = new JButton("VOLTAR");
+		btnVoltar = new JButton("VOLTAR");
 		btnVoltar.setBounds(339, 257, 89, 23);
 		contentPane.add(btnVoltar);
 		
-		btnVoltar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				setVisible(false);
-				new AtendenteView().setVisible(true);
+		listener();
+	}
+	
+	public void listener() {
+		
+		btnCadastrar.addActionListener(e -> {
+			try {
+				Object veiculo = veiculos.getSelectedItem();
+				Object cliente = clientes.getSelectedItem();
+				
+				double valorLocacao = locacaoController.calcularCustoLocacao(veiculo, dataRetirada, dataDevolucao);
+				
+				int opcao = JOptionPane.showConfirmDialog(contentPane, String.format("VALOR DA LOCAÇÃO: R$ %.2f", valorLocacao));
+				
+				if (opcao == 0) {
+					locacaoController.cadastrarDados(cliente, veiculo, dataRetirada, dataDevolucao);
+					
+					JOptionPane.showMessageDialog(contentPane, "LOCAÇÃO ADICIONADA COM SUCESSO");
+				}
+			}
+			catch (VeiculoLocadoException exception) {
+				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
+			}
+			catch (TamanhoInvalidoException exception) {
+				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
+			}
+			catch (IllegalArgumentException exception) {
+				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
+			}
+			catch (Exception exception) {
+				JOptionPane.showMessageDialog(contentPane, "ERRO AO ADICIONAR LOCAÇÃO");
 			}
 		});
 		
+		btnVoltar.addActionListener(e -> {
+			setVisible(false);
+			new AtendenteView().setVisible(true);
+		});
 	}
-	
-	public void adicionarItensClientes(JComboBox<String> comboBox) {
-		for (String s : clienteController.recuperarTodosComboBox()) {
-			comboBox.addItem(s);
-		}
-	}
-	
-	public void adicionarItensVeiculos(JComboBox<String> comboBox) {
-		for (String s : veiculoController.recuperarTodosComboBox()) {
-			comboBox.addItem(s);
-		}
+
+	@Override
+	public void botaoListener() {
+		// TODO Auto-generated method stub
+		
 	}
 }

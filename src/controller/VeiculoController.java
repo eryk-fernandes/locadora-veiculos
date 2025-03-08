@@ -39,13 +39,16 @@ public class VeiculoController {
 		new VeiculoDAO().atualizar(veiculo);
 	}
 	
-	public String[] recuperarTodosComboBox() {
+	public String[] criarListaPlacas() {
 		
 		List<String> veiculos = new ArrayList<>();
 		
 		try {
+			
 			for (Veiculo veiculo : recuperarTodos()) {
-				veiculos.add(veiculo.getPlaca());
+				String locacao = (veiculo.getStatus() == StatusLocacao.DISPONIVEL) ? "DISPONÍVEL" : "LOCADO";
+				
+				veiculos.add(veiculo.getPlaca() + " - " + locacao);
 			}
 		} catch (Exception e) {
 			
@@ -54,29 +57,51 @@ public class VeiculoController {
 		if (veiculos.size() == 0) {
 			return new String[] {"NENHUM VEÍCULO ADICIONADO"};
 		}
-		
-		veiculos.add("");
 			
 		return veiculos.toArray(new String[veiculos.size()]);
 	}
 	
-	public void cadastrarDados(Object tipo, JTextField placa, JTextField modelo, JTextField ano, Object status) throws Exception {
+	public String[] criarListaVeiculos() {
 		
-		if (tipo.toString().equals("Carro")) {
+		List<String> veiculos = new ArrayList<>();
+		
+		try {
+			
+			for (Veiculo veiculo : recuperarTodos()) {
+				
+				StringBuilder texto = new StringBuilder();
+				
+				texto.append(veiculo.getModelo() + " ");
+				texto.append(veiculo.getAno() + " ");
+				texto.append(veiculo.getPlaca() + " ");
+				texto.append(veiculo.getStatus().toString());
+				
+				veiculos.add(texto.toString());
+			}
+		} catch (Exception e) {
+			
+		}
+		
+		if (veiculos.size() == 0) {
+			return new String[] {"NENHUM VEÍCULO ADICIONADO"};
+		}
+			
+		return veiculos.toArray(new String[veiculos.size()]);
+	}
+	
+	public void cadastrarDados(Object tipo, JTextField placa, JTextField modelo, JTextField ano) throws Exception {
+		
+		if (tipo.toString().equals("CARRO")) {
 			veiculo = new Carro();
 		}
-		else if (tipo.toString().equals("Moto")) {
+		else if (tipo.toString().equals("MOTO")) {
 			veiculo = new Moto();
 		}
-		else if (tipo.toString().equals("Caminhão")) {
+		else if (tipo.toString().equals("CAMINHÃO")) {
 			veiculo = new Caminhao();
 		}
 		else {
 			throw new IllegalArgumentException("ESCOLHA UMA DAS OPÇÕES DE VEÍCULO");
-		}
-		
-		if (status.toString() == "") {
-			throw new IllegalArgumentException("ESCOLHA UM STATUS DE LOCAÇÃO");
 		}
 		
 		if (placa.getText().replace("-", "").length() != 7) {
@@ -84,10 +109,10 @@ public class VeiculoController {
 		}
 		
 		try {
-			veiculo.setPlaca(placa.getText());
+			veiculo.setPlaca(placa.getText().replace("-", ""));
 			veiculo.setModelo(modelo.getText());
 			veiculo.setAno(Integer.valueOf(ano.getText()));
-			veiculo.setStatus(StatusLocacao.valueOf(status.toString().toUpperCase().replace("Í", "I")));
+			veiculo.setStatus(StatusLocacao.DISPONIVEL);
 		}
 		catch (InputMismatchException e) {
 			throw e;

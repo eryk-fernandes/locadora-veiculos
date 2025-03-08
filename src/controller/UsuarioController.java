@@ -1,13 +1,15 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import dao.UsuarioDAO;
 import excecoes.SenhaIncorretaException;
-import excecoes.UsuarioJaAdicionadoException;
+import excecoes.UsuarioAdicionadoException;
 import excecoes.UsuarioNaoEncontradoException;
 import model.Administrador;
 import model.Atendente;
@@ -28,6 +30,10 @@ public class UsuarioController {
 		} catch (IOException e) {
 			return null;
 		}
+	}
+	
+	public List<Usuario> recuperarTodos() throws IOException {
+		return new UsuarioDAO().recuperarTodos();
 	}
 
 	public void salvar() throws IOException {
@@ -63,20 +69,39 @@ public class UsuarioController {
 		}
 
 	}
+	
+	public String[] recuperarTodosComboBox() {
+		
+		List<String> usuarios = new ArrayList<>();
+		
+		try {
+			for (Usuario usuario : recuperarTodos()) {
+				usuarios.add(usuario.getNomeUsuario());
+			}
+		} catch (Exception e) {
+			
+		}
+		
+		if (usuarios.size() == 0) {
+			return new String[] {"NENHUM USUÁRIO ADICIONADO"};
+		}
+		
+		return usuarios.toArray(new String[usuarios.size()]);
+	}
 
 	public void cadastrarDados(Object tipo, JTextField nomeUsuario, JPasswordField senha) throws Exception {
 
 		if (recuperar(nomeUsuario.getText()) != null) {
-			throw new UsuarioJaAdicionadoException("USUÁRIO JÁ ADICIONADO");
+			throw new UsuarioAdicionadoException("USUÁRIO JÁ ADICIONADO");
 		}
 		
-		if (tipo.toString().equals("Administrador")) {
+		if (tipo.toString().equals("ADMINISTRADOR")) {
 			usuario = new Administrador();
 		}
-		else if (tipo.toString().equals("Gerente")) {
+		else if (tipo.toString().equals("GERENTE")) {
 			usuario = new Gerente();
 		}
-		else if (tipo.toString().equals("Atendente")) {
+		else if (tipo.toString().equals("ATENDENTE")) {
 			usuario = new Atendente();
 		}
 		else {

@@ -1,6 +1,6 @@
 package model;
 
-public class Cliente {
+public class Cliente implements Comparable<Cliente> {
 
 	private String nome;
 	private String cpf;
@@ -48,6 +48,11 @@ public class Cliente {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Override
+	public int compareTo(Cliente outro) {
+		return getCpf().compareTo(outro.getCpf());
 	}
 	
 }

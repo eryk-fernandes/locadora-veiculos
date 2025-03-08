@@ -14,7 +14,7 @@ import model.Usuario;
 
 public class UsuarioDAO implements Persistencia<Usuario, String> {
 	
-	private static final String CAMINHO_JSON = "src/json/usuarios.json";
+	private static final String CAMINHO_JSON = "dados/usuarios.json";
 	
 	@Override
 	public Usuario recuperar(String nomeUsuario) throws IOException {

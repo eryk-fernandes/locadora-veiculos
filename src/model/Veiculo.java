@@ -1,6 +1,6 @@
 package model;
 
-public abstract class Veiculo {
+public abstract class Veiculo implements Comparable<Veiculo> {
 
 	protected String placa;
 	protected String modelo;
@@ -51,5 +51,19 @@ public abstract class Veiculo {
 	}
 	
 	public abstract double calcularCustoLocacaoDiario();
+
+	@Override
+	public int compareTo(Veiculo outro) {
+		if (this.status == StatusLocacao.DISPONIVEL && outro.status == StatusLocacao.LOCADO) {
+			return -1;
+		}
+		if (this.status == StatusLocacao.DISPONIVEL && outro.status == StatusLocacao.DISPONIVEL) {
+			return 0;
+		}
+		if (this.status == StatusLocacao.LOCADO && outro.status == StatusLocacao.LOCADO) {
+			return 0;
+		}
+		return 1;
+	}
 	
 }

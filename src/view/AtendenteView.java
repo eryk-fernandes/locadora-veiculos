@@ -1,8 +1,6 @@
 package view;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,12 +9,13 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-public class AtendenteView extends JFrame {
+public class AtendenteView extends JFrame implements BotaoListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JButton btnLocacao;
 	private JButton btnDevolucao;
+	private JButton btnVoltar;
 
 	public AtendenteView() {
 		setResizable(false);
@@ -31,51 +30,38 @@ public class AtendenteView extends JFrame {
 		JLabel textoAtendente = new JLabel("ATENDENTE");
 		textoAtendente.setHorizontalAlignment(SwingConstants.CENTER);
 		textoAtendente.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		textoAtendente.setBounds(139, 31, 149, 34);
+		textoAtendente.setBounds(0, 31, 454, 34);
 		contentPane.add(textoAtendente);
 		
 		btnLocacao = new JButton("REGISTRAR LOCACAO");
 		btnLocacao.setBounds(114, 99, 211, 40);
 		contentPane.add(btnLocacao);
 		
-		btnLocacao.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				try {
-					new LocacaoView().setVisible(true);
-					
-				} catch (Exception f) {
-					f.printStackTrace();
-				}
-			}
-		});
-		
 		btnDevolucao = new JButton("REGISTRAR DEVOLUÇÂO");
 		btnDevolucao.setBounds(114, 187, 211, 40);
 		contentPane.add(btnDevolucao);
 		
-		btnDevolucao.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				try {
-					new DevolucaoView().setVisible(true);
-					
-				} catch (Exception f) {
-					f.printStackTrace();
-				}
-			}
-		});
-		
-		JButton btnVoltar = new JButton("VOLTAR");
+		btnVoltar = new JButton("VOLTAR");
 		btnVoltar.setBounds(339, 257, 89, 23);
 		contentPane.add(btnVoltar);
+	
+		botaoListener();
+	}
+	
+	@Override
+	public void botaoListener() {
 		
-		btnVoltar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e){
-				setVisible(false);
-				new LoginView().setVisible(true);
-			}
+		btnLocacao.addActionListener(e -> {
+			new LocacaoView().setVisible(true);
+		});
+		
+		btnDevolucao.addActionListener(e -> {
+			new DevolucaoView().setVisible(true);
+		});
+		
+		btnVoltar.addActionListener(e -> {
+			setVisible(false);
+			new LoginView().setVisible(true);
 		});
 	}
 }

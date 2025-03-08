@@ -9,8 +9,8 @@ import view.SinginView;
 public class Main {
 
 	public static void main(String[] args) {
-		
-		try (FileReader fr = new FileReader("src/json/usuarios.json")) {
+
+		try (FileReader fr = new FileReader("dados/usuarios.json")) {
 			if (fr.read() == -1) {
 				new SinginView().setVisible(true);
 			}
@@ -19,7 +19,7 @@ public class Main {
 			}
 		}
 		catch (IOException e) {
-
+			
 		}
 		
 	}
