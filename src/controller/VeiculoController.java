@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.JTextField;
 
 import dao.VeiculoDAO;
+import excecoes.ProibidoRemoverException;
 import excecoes.TamanhoInvalidoException;
 import model.Caminhao;
 import model.Carro;
@@ -39,51 +40,41 @@ public class VeiculoController {
 		new VeiculoDAO().atualizar(veiculo);
 	}
 	
-	public String[] criarListaPlacas() {
+	public String[] criarListaPlacas() throws Exception {
 		
 		List<String> veiculos = new ArrayList<>();
-		
-		try {
-			
-			for (Veiculo veiculo : recuperarTodos()) {
-				String locacao = (veiculo.getStatus() == StatusLocacao.DISPONIVEL) ? "DISPONÍVEL" : "LOCADO";
+
+		for (Veiculo veiculo : recuperarTodos()) {
+			String locacao = (veiculo.getStatus() == StatusLocacao.DISPONIVEL) ? "DISPONÍVEL" : "LOCADO";
 				
-				veiculos.add(veiculo.getPlaca() + " - " + locacao);
-			}
-		} catch (Exception e) {
-			
+			veiculos.add(veiculo.getPlaca() + " - " + locacao);
 		}
 		
 		if (veiculos.size() == 0) {
-			return new String[] {"NENHUM VEÍCULO ADICIONADO"};
+			veiculos.add("NENHUM VEÍCULO ADICIONADO");
 		}
 			
 		return veiculos.toArray(new String[veiculos.size()]);
 	}
 	
-	public String[] criarListaVeiculos() {
+	public String[] criarListaVeiculos() throws Exception {
 		
 		List<String> veiculos = new ArrayList<>();
 		
-		try {
+		for (Veiculo veiculo : recuperarTodos()) {
+				
+			StringBuilder texto = new StringBuilder();
+				
+			texto.append(veiculo.getModelo() + " ");
+			texto.append(veiculo.getAno() + " ");
+			texto.append(veiculo.getPlaca() + " ");
+			texto.append(veiculo.getStatus().toString());
 			
-			for (Veiculo veiculo : recuperarTodos()) {
-				
-				StringBuilder texto = new StringBuilder();
-				
-				texto.append(veiculo.getModelo() + " ");
-				texto.append(veiculo.getAno() + " ");
-				texto.append(veiculo.getPlaca() + " ");
-				texto.append(veiculo.getStatus().toString());
-				
-				veiculos.add(texto.toString());
-			}
-		} catch (Exception e) {
-			
+			veiculos.add(texto.toString());
 		}
 		
 		if (veiculos.size() == 0) {
-			return new String[] {"NENHUM VEÍCULO ADICIONADO"};
+			veiculos.add("NENHUM VEÍCULO ADICIONADO");
 		}
 			
 		return veiculos.toArray(new String[veiculos.size()]);
@@ -123,6 +114,25 @@ public class VeiculoController {
 		} catch (Exception e) {
 			throw new IOException("ERRO AO ADICIONAR O USUÁRIO");
 		}
+	}
+	
+	public void removerVeiculo(Object veiculoInfo) throws Exception {
+		
+		if (veiculoInfo.toString().equals("")) {
+			throw new IllegalArgumentException("SELECIONE UMA OPÇÃO DE VEÍCULO");
+		}
+		
+		String placa = veiculoInfo.toString().split(" ")[2];
+		
+		Veiculo veiculo = new VeiculoDAO().recuperar(placa);
+		
+		if (veiculo.getStatus() == StatusLocacao.DISPONIVEL) {
+			new VeiculoDAO().remover(veiculo);
+		}
+		else {
+			throw new ProibidoRemoverException("NÃO É PERMITIDO REMOVER CLIENTES COM LOCAÇÕES PENDENTES");
+		}
+
 	}
 
 }

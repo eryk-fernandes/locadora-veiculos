@@ -6,12 +6,14 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controller.ClienteController;
+import excecoes.ProibidoRemoverException;
 
 public class GerenciarClientesView extends JFrame implements BotaoListener {
 
@@ -57,7 +59,13 @@ public class GerenciarClientesView extends JFrame implements BotaoListener {
 		textoOpcoes.setBounds(52, 153, 114, 14);
 		contentPane.add(textoOpcoes);
 		
+		JLabel textoAtributo = new JLabel("NOVO ATRIBUTO");
+		textoAtributo.setHorizontalAlignment(SwingConstants.CENTER);
+		textoAtributo.setBounds(195, 153, 201, 14);
+		contentPane.add(textoAtributo);
+		
 		atributo = new JTextField();
+		atributo.setHorizontalAlignment(SwingConstants.CENTER);
 		atributo.setBounds(195, 179, 199, 20);
 		contentPane.add(atributo);
 		atributo.setColumns(10);
@@ -73,8 +81,12 @@ public class GerenciarClientesView extends JFrame implements BotaoListener {
 		clientes = new JComboBox<String>();
 		clientes.setBounds(52, 107, 199, 22);
 		
-		for (String cliente : clienteController.criarListaCPFs())
-			clientes.addItem(cliente);
+		try {
+			for (String cliente : clienteController.criarListaCPFs())
+				clientes.addItem(cliente);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(contentPane, "ERRO AO RECUPERAR CLIENTES");
+		}
 		
 		contentPane.add(clientes);
 		
@@ -100,9 +112,37 @@ public class GerenciarClientesView extends JFrame implements BotaoListener {
 	@Override
 	public void botaoListener() {
 		
+		btnConfirmar.addActionListener(e -> {
+			
+			try {
+				if (operacoes.getSelectedItem().toString().equals("EDITAR")) {
+				
+					clienteController.editarCliente(clientes.getSelectedItem(), opcoes.getSelectedItem(), atributo);
+				
+					JOptionPane.showMessageDialog(contentPane, "CLIENTE ATUALIZADO COM SUCESSO");
+				}
+				else if (operacoes.getSelectedItem().toString().equals("REMOVER")) {
+					clienteController.removerCliente(clientes.getSelectedItem());
+				
+					JOptionPane.showMessageDialog(contentPane, "CLIENTE REMOVIDO COM SUCESSO");
+				}
+				else {
+					JOptionPane.showMessageDialog(contentPane, "SELECIONE UMA OPERAÇÃO");
+				}
+			}
+			catch (ProibidoRemoverException exception) {
+				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
+			}
+			catch (IllegalArgumentException exception) {
+				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
+			}
+			catch (Exception exception) {
+				JOptionPane.showMessageDialog(contentPane, "ERRO AO GERENCIAR CLIENTE");
+			}
+		});
+		
 		btnVoltar.addActionListener(e -> {
 			setVisible(false);
-			new GerenteView().setVisible(true);
 		});
 	}
 }

@@ -6,6 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -16,7 +17,7 @@ public class RemoverVeiculoView extends JFrame implements BotaoListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JComboBox<String> clientes;
+	private JComboBox<String> veiculos;
 	private JButton btnConfirmar;
 	private JButton btnVoltar;
 	
@@ -43,13 +44,19 @@ public class RemoverVeiculoView extends JFrame implements BotaoListener {
 		textoVeiculos.setBounds(0, 109, 454, 14);
 		contentPane.add(textoVeiculos);
 		
-		clientes = new JComboBox<String>();
-		clientes.setBounds(95, 134, 258, 22);
+		veiculos = new JComboBox<String>();
+		veiculos.setBounds(95, 134, 258, 22);
+
+		try {
+			for (String veiculo : veiculoController.criarListaVeiculos()) {
+				veiculos.addItem(veiculo);
+			}
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(contentPane, "ERRO AO RECUPERAR VEÍCUOS");
+		}
 		
-		for (String veiculo : veiculoController.criarListaVeiculos())
-			clientes.addItem(veiculo);
-		
-		contentPane.add(clientes);
+		contentPane.add(veiculos);
 		
 		btnConfirmar = new JButton("CONFIRMAR");
 		btnConfirmar.setBounds(144, 245, 159, 23);
@@ -67,11 +74,29 @@ public class RemoverVeiculoView extends JFrame implements BotaoListener {
 		
 		btnConfirmar.addActionListener(e -> {
 			
+			try {
+				int opcao = JOptionPane.showConfirmDialog(contentPane, "REMOVER VEÍCULO?");
+				
+				if (opcao == 0) {
+					veiculoController.removerVeiculo(veiculos.getSelectedItem());
+					
+					JOptionPane.showMessageDialog(contentPane, "VEÍCULO REMOVIDO COM SUCESSO");
+					
+					setVisible(false);
+				}
+				
+			}
+			catch (IllegalArgumentException exception) {
+				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
+			}
+			catch (Exception exception) {
+				JOptionPane.showMessageDialog(contentPane, "ERRO AO REMOVER VEÍCULO"
+						+ "");
+			}
 		});
 		
 		btnVoltar.addActionListener(e -> {
 			setVisible(false);
-			new GerenteView().setVisible(true);
 		});
 		
 	}

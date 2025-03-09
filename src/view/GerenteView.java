@@ -44,7 +44,7 @@ public class GerenteView extends JFrame implements BotaoListener {
 		btnVeiculo.setBounds(123, 142, 214, 29);
 		contentPane.add(btnVeiculo);
 		
-		btnRelatorio = new JButton("VISUALIZAR RELATÓRIO");
+		btnRelatorio = new JButton("GERAR RELATÓRIO");
 		btnRelatorio.setBounds(123, 217, 214, 29);
 		contentPane.add(btnRelatorio);
 		
@@ -71,7 +71,7 @@ public class GerenteView extends JFrame implements BotaoListener {
 		});
 		
 		btnVeiculo.addActionListener(e -> {
-			new VeiculoView().setVisible(true);;
+			new CadastrarVeiculoView().setVisible(true);;
 		});
 		
 		btnRemover.addActionListener(e -> {

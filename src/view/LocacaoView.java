@@ -88,25 +88,33 @@ public class LocacaoView extends JFrame implements BotaoListener {
 			mask = new MaskFormatter("##/##/####");
 			mask.install(dataDevolucao);
 		}
-		catch (ParseException e1) {
-			e1.printStackTrace();
+		catch (ParseException exception) {
+			JOptionPane.showMessageDialog(contentPane, "ERRO");
 		}
 		
 		clientes = new JComboBox<String>();
 		clientes.setBounds(76, 112, 121, 22);
 		
-		clientes.addItem("");
-		for (String s : clienteController.criarListaCPFs())
-			clientes.addItem(s);
+		try {
+			for (String s : clienteController.criarListaCPFs())
+				clientes.addItem(s);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(contentPane, "ERRO AO RECUPERAR CLIENTES");
+		}
 		
 		contentPane.add(clientes);
 		
 		veiculos = new JComboBox<String>();
 		veiculos.setBounds(234, 112, 179, 22);
 		
-		veiculos.addItem("");
-		for (String s : veiculoController.criarListaPlacas())
-			veiculos.addItem(s);
+		try {
+			for (String s : veiculoController.criarListaPlacas()) {
+				veiculos.addItem(s);
+			}
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(contentPane, "ERRO AO RECUPERAR VEÍCULOS");
+		}
 		
 		contentPane.add(veiculos);
 		
@@ -118,11 +126,11 @@ public class LocacaoView extends JFrame implements BotaoListener {
 		btnVoltar.setBounds(339, 257, 89, 23);
 		contentPane.add(btnVoltar);
 		
-		listener();
+		botaoListener();
 	}
 	
-	public void listener() {
-		
+	@Override
+	public void botaoListener() {
 		btnCadastrar.addActionListener(e -> {
 			try {
 				Object veiculo = veiculos.getSelectedItem();
@@ -154,13 +162,7 @@ public class LocacaoView extends JFrame implements BotaoListener {
 		
 		btnVoltar.addActionListener(e -> {
 			setVisible(false);
-			new AtendenteView().setVisible(true);
 		});
-	}
-
-	@Override
-	public void botaoListener() {
-		// TODO Auto-generated method stub
 		
 	}
 }

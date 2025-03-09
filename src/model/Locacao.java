@@ -64,7 +64,7 @@ public class Locacao implements Comparable<Locacao> {
 	
 	@Override
 	public int compareTo(Locacao outro) {
-		return getId().compareTo(outro.getId());
+		return -1 * getId().compareTo(outro.getId());
 	}
 	
 }

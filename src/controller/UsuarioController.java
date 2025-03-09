@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPasswordField;
@@ -68,25 +67,6 @@ public class UsuarioController {
 			throw new SenhaIncorretaException("USUÁRIO OU SENHA INCORRETOS");
 		}
 
-	}
-	
-	public String[] recuperarTodosComboBox() {
-		
-		List<String> usuarios = new ArrayList<>();
-		
-		try {
-			for (Usuario usuario : recuperarTodos()) {
-				usuarios.add(usuario.getNomeUsuario());
-			}
-		} catch (Exception e) {
-			
-		}
-		
-		if (usuarios.size() == 0) {
-			return new String[] {"NENHUM USUÁRIO ADICIONADO"};
-		}
-		
-		return usuarios.toArray(new String[usuarios.size()]);
 	}
 
 	public void cadastrarDados(Object tipo, JTextField nomeUsuario, JPasswordField senha) throws Exception {

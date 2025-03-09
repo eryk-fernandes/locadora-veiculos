@@ -25,23 +25,30 @@ public class LocacaoController {
 
 	}
 	
-	public double calcularCustoLocacao() {
+	public double calcularCustoLocacao(Object locacaoInfo, JTextField pagamento) throws IOException {
 		
-		LocalDate retirada = locacao.getRetirada();
+		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
+		int idLocacao = Integer.valueOf(locacaoInfo.toString().split(" ")[1]);
+		
+		Locacao locacao = new LocacaoDAO().recuperar(idLocacao);
+		
+		LocalDate dataRetirada = locacao.getRetirada();
+		LocalDate dataPagamento = LocalDate.parse(pagamento.getText(), formatador);
  		
- 		long dias = ChronoUnit.DAYS.between(retirada, LocalDate.now());
+ 		long dias = ChronoUnit.DAYS.between(dataRetirada, dataPagamento);
  		double custoLocacaoDiario = locacao.getVeiculo().calcularCustoLocacaoDiario();
 		
 		return custoLocacaoDiario * dias;
 	}
 	
-	public double calcularCustoLocacao(Object veiculoInfo, JTextField retirada, JTextField devolucao) throws IOException {
+	public double calcularCustoLocacao(Object veiculoInfo, JTextField retirada, JTextField pagamento) throws IOException {
 
 		Veiculo veiculo = null;
 		
 		LocalDate dataRetirada = LocalDate.parse(retirada.getText().split(" ")[0], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		
-		LocalDate dataDevolucao = LocalDate.parse(devolucao.getText().split(" ")[0], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		LocalDate dataDevolucao = LocalDate.parse(pagamento.getText().split(" ")[0], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		
 		String placa = veiculoInfo.toString().split(" ")[0];
 		
@@ -85,7 +92,7 @@ public class LocacaoController {
 		new LocacaoDAO().atualizar(locacao);
 	}
 	
-	public String[] recuperarTodosComboBox() {
+	public String[] recuperarStringLocacoes() {
 		
 		List<String> locacoes = new ArrayList<>();
 		
@@ -95,7 +102,8 @@ public class LocacaoController {
 				
 				texto.append("ID: " + locacao.getId() + " ");
 				texto.append("CPF: " + locacao.getCliente().getCpf() + " ");
-				texto.append("PLACA: " + locacao.getVeiculo().getPlaca());
+				texto.append("PLACA: " + locacao.getVeiculo().getPlaca() + " ");
+				texto.append("DATA: " + locacao.getRetirada().format(DateTimeFormatter.ofPattern("MM/yyyy")));
 				
 				locacoes.add(texto.toString());
 			}
@@ -104,7 +112,33 @@ public class LocacaoController {
 		}
 		
 		if (locacoes.size() == 0) {
-			return new String[] {"NENHUMA LOCAÇÃO ADICIONADA"};
+			locacoes.add("NENHUMA LOCAÇÃO ADICIONADA");
+		}
+
+		return locacoes.toArray(new String[locacoes.size()]);
+	}
+	
+	public String[] recuperarStringLocacoesPendentes() {
+		
+		List<String> locacoes = new ArrayList<>();
+		
+		try {
+			for (Locacao locacao : recuperarTodos()) {
+				StringBuilder texto = new StringBuilder();
+				
+				texto.append("ID: " + locacao.getId() + " ");
+				texto.append("CPF: " + locacao.getCliente().getCpf() + " ");
+				texto.append("PLACA: " + locacao.getVeiculo().getPlaca() + " ");
+				texto.append("DATA: " + locacao.getRetirada().format(DateTimeFormatter.ofPattern("MM/yyyy")));
+				
+				locacoes.add(texto.toString());
+			}
+		} catch (Exception e) {
+			
+		}
+		
+		if (locacoes.size() == 0) {
+			locacoes.add("NENHUMA LOCAÇÃO ADICIONADA");
 		}
 
 		return locacoes.toArray(new String[locacoes.size()]);

@@ -79,7 +79,7 @@ public class SinginView extends JFrame implements BotaoListener {
 				JOptionPane.showMessageDialog(contentPane, "ADMINISTRADOR ADICIONADO COM SUCESSO");
 					
 				setVisible(false);
-				new UsuarioView().setVisible(true);
+				new PrincipalView().setVisible(true);
 					
 			} catch (Exception exception) {
 				JOptionPane.showMessageDialog(contentPane, "ERRO AO EFETUAR SIGN IN");

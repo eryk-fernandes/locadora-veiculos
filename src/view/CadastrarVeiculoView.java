@@ -14,7 +14,7 @@ import javax.swing.border.EmptyBorder;
 
 import controller.VeiculoController;
 
-public class VeiculoView extends JFrame implements BotaoListener {
+public class CadastrarVeiculoView extends JFrame implements BotaoListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -27,7 +27,7 @@ public class VeiculoView extends JFrame implements BotaoListener {
 	
 	private static VeiculoController veiculoController = new VeiculoController();
 
-	public VeiculoView() {
+	public CadastrarVeiculoView() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(400, 200, 470, 330);
@@ -120,7 +120,6 @@ public class VeiculoView extends JFrame implements BotaoListener {
 		
 		btnVoltar.addActionListener(e -> {
 			setVisible(false);
-			new GerenteView().setVisible(true);
 		});
 	}
 

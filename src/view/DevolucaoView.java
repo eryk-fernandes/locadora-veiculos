@@ -71,18 +71,17 @@ public class DevolucaoView extends JFrame implements BotaoListener {
 			mask = new MaskFormatter("##/##/####");
 			mask.install(dataPagamento);
 		}
-		catch (ParseException e1) {
-			e1.printStackTrace();
+		catch (ParseException exception) {
+			JOptionPane.showMessageDialog(contentPane, "ERRO");
 		}
 		
 		contentPane.add(dataPagamento);
 
 		locacoes = new JComboBox<String>();
-		locacoes.setBounds(81, 114, 305, 22);
+		locacoes.setBounds(55, 113, 359, 22);
 		contentPane.add(locacoes);
 		
-		locacoes.addItem("");
-		for (String locacao : locacaoController.recuperarTodosComboBox()) {
+		for (String locacao : locacaoController.recuperarStringLocacoesPendentes()) {
 			locacoes.addItem(locacao);
 		}
 		
@@ -115,13 +114,13 @@ public class DevolucaoView extends JFrame implements BotaoListener {
 		btnPagamento.addActionListener(e -> {;
 			try {
 				
-				double locacao = pagamentoController.resgatarCustoLocacao(locacoes.getSelectedItem());
+				double locacao = pagamentoController.resgatarCustoLocacao(locacoes.getSelectedItem(), dataPagamento);
 				double multa = pagamentoController.calcularMulta(locacoes.getSelectedItem(), dataPagamento);
 				double total = pagamentoController.calcularTotal(locacoes.getSelectedItem(), dataPagamento);
-				
+
 				int opcao = JOptionPane.showConfirmDialog(
 						contentPane,
-						String.format("LOCAÇÃO: R$ %.2f\nMULTA: R% %.2f\nTOTAL: R% %.2f", locacao, multa, total)
+						String.format("LOCAÇÃO: R$ %.2f\nMULTA: R$ %.2f\nTOTAL: R$ %.2f", locacao, multa, total)
 				);
 				
 				if (opcao == 0) {
@@ -132,6 +131,8 @@ public class DevolucaoView extends JFrame implements BotaoListener {
 					);
 
 					JOptionPane.showMessageDialog(contentPane, "PAGAMENTO EFETUADO COM SUCESSO");
+					
+					setVisible(false);
 				}
 
 			}
@@ -145,7 +146,6 @@ public class DevolucaoView extends JFrame implements BotaoListener {
 		
 		btnVoltar.addActionListener(e -> {
 			setVisible(false);
-			new AtendenteView().setVisible(true);
 		});
 	}
 }

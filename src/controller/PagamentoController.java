@@ -40,10 +40,8 @@ public class PagamentoController {
 		return new LocacaoController().calcularCustoLocacao(new LocacaoDAO().recuperar(idLocacao));
 	}
 	
-	public double resgatarCustoLocacao(Object locacaoInfo) throws IOException {
-		int idLocacao = Integer.valueOf(locacaoInfo.toString().split(" ")[1]);
-		
-		return new LocacaoController().calcularCustoLocacao(new LocacaoDAO().recuperar(idLocacao));
+	public double resgatarCustoLocacao(Object locacaoInfo, JTextField pagamento) throws IOException {
+		return new LocacaoController().calcularCustoLocacao(locacaoInfo, pagamento);
 	}
 	
 	public double calcularMulta(Object locacaoInfo, JTextField dataPagamento) throws IOException {
@@ -55,42 +53,26 @@ public class PagamentoController {
 		
 		long dias = ChronoUnit.DAYS.between(devolucao, pagamento);
 		
- 		double custoJuros = new LocacaoDAO().recuperar(idLocacao).getVeiculo().calcularCustoLocacaoDiario() * 0.1;
- 		
-		double multa = custoJuros * dias;
-		
-		return multa;
-	}
-	
-	public double calcularMulta(int idLocacao, JTextField dataPagamento) throws IOException {
+ 		double custoJuros = new LocacaoDAO().recuperar(idLocacao).getVeiculo().calcularCustoLocacaoDiario() * 0.5;
 
-		LocalDate devolucao = new LocacaoDAO().recuperar(idLocacao).getDevolucao();
-		LocalDate pagamento = LocalDate.parse(dataPagamento.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		
-		long dias = ChronoUnit.DAYS.between(devolucao, pagamento);
-		
- 		double custoJuros = new LocacaoDAO().recuperar(idLocacao).getVeiculo().calcularCustoLocacaoDiario() * 0.1;
- 		
 		double multa = custoJuros * dias;
 		
 		return multa;
 	}
 	
 	public double calcularTotal(Object locacaoInfo, JTextField dataPagamento) throws IOException {
-		int idLocacao = Integer.valueOf(locacaoInfo.toString().split(" ")[1]);
+		double locacao = new LocacaoController().calcularCustoLocacao(locacaoInfo, dataPagamento);
 		
-		double locacao = new LocacaoController().calcularCustoLocacao(new LocacaoDAO().recuperar(idLocacao));
-		
-		double multa = calcularMulta(idLocacao, dataPagamento);
+		double multa = calcularMulta(locacaoInfo, dataPagamento);
 		
 		return locacao + multa;
 	}
 	
 	public void cadastrarDados(Object locacaoInfo, Object metodo, JTextField dataPagamento) throws Exception {
 		
+		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
 		Locacao locacao = new LocacaoDAO().recuperar(Integer.valueOf(locacaoInfo.toString().split(" ")[1]));
-
-		Pagamento pagamento = new Pagamento();
 		
 		if (metodo.toString().equals("DINHEIRO")) {
 			pagamento.setMetodoPagamento(MetodoPagamento.DINHEIRO);
@@ -112,21 +94,18 @@ public class PagamentoController {
 		}
 
 		pagamento.setId(locacao.getId());
-		pagamento.setDataPagamento(LocalDate.parse(dataPagamento.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 		pagamento.setIdLocacao(locacao.getId());
+		pagamento.setDataPagamento(LocalDate.parse(dataPagamento.getText(), formatador));
 		
-		double valorInicial = new LocacaoController().calcularCustoLocacao(locacao);
-		
-		pagamento.setValorPago(
-				valorInicial +
-				calcularMulta(locacao.getId(), dataPagamento)
-				);
+		pagamento.setValorPago(calcularTotal(locacaoInfo, dataPagamento));
 		
 		try {
 			Veiculo veiculo = new VeiculoDAO().recuperar(locacaoInfo.toString().split(" ")[5]);
 			veiculo.setStatus(StatusLocacao.DISPONIVEL);
 			
 			new VeiculoDAO().atualizar(veiculo);
+			
+			System.out.println("Atualizar veículo");
 			
 			salvar();
 		} catch (Exception e) {

@@ -116,7 +116,6 @@ public class CadastrarClienteView extends JFrame implements BotaoListener {
 		
 		btnVoltar.addActionListener(e -> {
 			setVisible(false);
-			new GerenteView().setVisible(true);
 		});
 	}
 	

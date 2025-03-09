@@ -23,6 +23,7 @@ public class LoginView extends JFrame implements BotaoListener {
 	private JTextField nomeUsuario;
 	private JPasswordField senha;
 	private JButton btnEntrar;
+	private JButton btnVoltar;
 	
 	private UsuarioController usuarioController = new UsuarioController();
 
@@ -76,6 +77,10 @@ public class LoginView extends JFrame implements BotaoListener {
 		btnEntrar.setBounds(136, 231, 180, 23);
 		contentPane.add(btnEntrar);
 		
+		btnVoltar = new JButton("VOLTAR");
+		btnVoltar.setBounds(339, 257, 89, 23);
+		contentPane.add(btnVoltar);
+		
 		botaoListener();
 		
 	}
@@ -115,7 +120,11 @@ public class LoginView extends JFrame implements BotaoListener {
 			
 		});
 		
+		btnVoltar.addActionListener(e -> {
+			setVisible(false);
+			new PrincipalView().setVisible(true);
+		});
+		
 	}
-
 
 }

@@ -7,8 +7,12 @@ import java.util.List;
 import javax.swing.JTextField;
 
 import dao.ClienteDAO;
+import dao.LocacaoDAO;
+import dao.PagamentoDAO;
+import excecoes.ProibidoRemoverException;
 import excecoes.TamanhoInvalidoException;
 import model.Cliente;
+import model.Locacao;
 
 public class ClienteController {
 	
@@ -34,20 +38,16 @@ public class ClienteController {
 		new ClienteDAO().atualizar(cliente);
 	}
 	
-	public String[] criarListaCPFs() {
+	public String[] criarListaCPFs() throws Exception {
 		
 		List<String> clientes = new ArrayList<>();
-		
-		try {
-			for (Cliente cliente : recuperarTodos()) {
-				clientes.add(cliente.getCpf());
-			}
-		} catch (Exception e) {
-			
+
+		for (Cliente cliente : recuperarTodos()) {
+			clientes.add(cliente.getCpf());
 		}
-		
+			
 		if (clientes.size() == 0) {
-			return new String[] {"NENHUM CLIENTE ADICIONADO"};
+			clientes.add("NENHUM VEÍCULO ADICIONADO");
 		}
 		
 		return clientes.toArray(new String[clientes.size()]);
@@ -71,6 +71,75 @@ public class ClienteController {
 		} catch (IOException e) {
 			throw new IOException("ERRO AO ADICIONAR CLIENTE");
 		}
+	}
+	
+	public void editarCliente(Object clienteInfo, Object tipoAtributo, JTextField atributo) throws Exception {
+		Cliente cliente = new ClienteDAO().recuperar(clienteInfo.toString());
+		
+		if (tipoAtributo.toString() == "NOME") {
+			cliente.setNome(atributo.getText());
+		}
+		else if (tipoAtributo.toString() == "TELEFONE") {
+			cliente.setTelefone(atributo.getText().replace(" ", "").replace("-", ""));
+		}
+		else if (tipoAtributo.toString() == "EMAIL") {
+			cliente.setEmail(atributo.getText());
+		}
+		else {
+			throw new IllegalArgumentException("SELECIONE UM TIPO DE ATRIBUTO");
+		}
+		
+		if (atributo.getText() == "") {
+			throw new IllegalArgumentException("DIGITE UM ATRIBUTO");
+		}
+		
+		new ClienteDAO().atualizar(cliente);
+		
+		List<Locacao> locacoes = new LocacaoDAO().recuperarTodos();
+		
+		if (locacoes != null) {
+			for (Locacao locacao : locacoes) {
+				if (cliente.getCpf().equals(locacao.getCliente().getCpf())) {
+					locacao.setCliente(cliente);
+					
+					new LocacaoDAO().atualizar(locacao);
+				}
+			}
+		}
+	}
+	
+	public void removerCliente(Object clienteInfo) throws Exception {
+		
+		String cpf = clienteInfo.toString();
+		
+		Cliente cliente = new ClienteDAO().recuperar(cpf);
+		
+		if (new LocacaoDAO().recuperarTodos() == null) {
+			new ClienteDAO().remover(cliente);
+			return;
+		}
+		
+		boolean clientePossuiLocacao = false;;
+		
+		for (Locacao locacao : new LocacaoDAO().recuperarTodos()) {
+			
+			if (cpf.equals(locacao.getCliente().getCpf())) {
+				clientePossuiLocacao = true;
+			}
+			
+			if (cpf.equals(locacao.getCliente().getCpf()) && new PagamentoDAO().recuperar(locacao.getId()) != null) {
+				new ClienteDAO().remover(cliente);
+				return;
+			}
+		}
+		
+		if (!clientePossuiLocacao) {
+			new ClienteDAO().remover(cliente);
+		}
+		else {
+			throw new ProibidoRemoverException("NÃO É PERMITIDO REMOVER CLIENTES COM LOCAÇÕES PENDENTES");
+		}
+
 	}
 
 }

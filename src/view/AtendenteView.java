@@ -15,6 +15,7 @@ public class AtendenteView extends JFrame implements BotaoListener {
 	private JPanel contentPane;
 	private JButton btnLocacao;
 	private JButton btnDevolucao;
+	private JButton btnVerLocacoes;
 	private JButton btnVoltar;
 
 	public AtendenteView() {
@@ -34,16 +35,20 @@ public class AtendenteView extends JFrame implements BotaoListener {
 		contentPane.add(textoAtendente);
 		
 		btnLocacao = new JButton("REGISTRAR LOCACAO");
-		btnLocacao.setBounds(114, 99, 211, 40);
+		btnLocacao.setBounds(114, 86, 211, 40);
 		contentPane.add(btnLocacao);
 		
 		btnDevolucao = new JButton("REGISTRAR DEVOLUÇÂO");
-		btnDevolucao.setBounds(114, 187, 211, 40);
+		btnDevolucao.setBounds(114, 137, 211, 40);
 		contentPane.add(btnDevolucao);
 		
 		btnVoltar = new JButton("VOLTAR");
 		btnVoltar.setBounds(339, 257, 89, 23);
 		contentPane.add(btnVoltar);
+		
+		btnVerLocacoes = new JButton("VISUALIZAR LOCAÇÕES");
+		btnVerLocacoes.setBounds(114, 188, 211, 40);
+		contentPane.add(btnVerLocacoes);
 	
 		botaoListener();
 	}
@@ -57,6 +62,11 @@ public class AtendenteView extends JFrame implements BotaoListener {
 		
 		btnDevolucao.addActionListener(e -> {
 			new DevolucaoView().setVisible(true);
+		});
+		
+		btnVerLocacoes.addActionListener(e -> {
+			setVisible(false);
+			new VisualizarLocacoesView().setVisible(true);
 		});
 		
 		btnVoltar.addActionListener(e -> {
