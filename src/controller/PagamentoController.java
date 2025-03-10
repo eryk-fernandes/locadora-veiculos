@@ -100,8 +100,6 @@ public class PagamentoController {
 		pagamento.setDataPagamento(dataPagamento);
 		pagamento.setValorPago(calcularTotal(locacaoInfo, devolucaoDataPagamento));
 		
-		System.out.println(pagamento);
-		
 		Veiculo veiculo = locacao.getVeiculo();
 		veiculo.setStatus(StatusLocacao.DISPONIVEL);
 			
