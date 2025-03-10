@@ -15,7 +15,7 @@ import model.Cliente;
 
 public class ClienteDAO implements Persistencia<Cliente, String> {
 	
-	private static final String CAMINHO_JSON = "dados/clientes.json";
+	private static final String CAMINHO_JSON = "dados/json/clientes.json";
 
 	@Override
 	public Cliente recuperar(String cpf) throws IOException {

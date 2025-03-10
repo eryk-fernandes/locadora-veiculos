@@ -1,4 +1,4 @@
-package excecoes;
+package exception;
 
 public class TamanhoInvalidoException extends Exception {
 

@@ -25,11 +25,11 @@ public class PrincipalView extends JFrame implements BotaoListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("LOCADORA DE VEÍCULOS");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(0, 77, 454, 32);
-		contentPane.add(lblNewLabel);
+		JLabel textoLocadora = new JLabel("LOCADORA DE VEÍCULOS");
+		textoLocadora.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		textoLocadora.setHorizontalAlignment(SwingConstants.CENTER);
+		textoLocadora.setBounds(0, 77, 454, 32);
+		contentPane.add(textoLocadora);
 		
 		JLabel textoAutoCordeiros = new JLabel("AUTO CORDEIROS");
 		textoAutoCordeiros.setHorizontalAlignment(SwingConstants.CENTER);

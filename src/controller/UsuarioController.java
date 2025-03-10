@@ -1,15 +1,12 @@
 package controller;
 
-import java.io.IOException;
-import java.util.List;
-
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import dao.UsuarioDAO;
-import excecoes.SenhaIncorretaException;
-import excecoes.UsuarioAdicionadoException;
-import excecoes.UsuarioNaoEncontradoException;
+import exception.SenhaIncorretaException;
+import exception.UsuarioAdicionadoException;
+import exception.UsuarioNaoEncontradoException;
 import model.Administrador;
 import model.Atendente;
 import model.Gerente;
@@ -23,21 +20,9 @@ public class UsuarioController {
 
 	}
 
-	public Usuario recuperar(String nomeUsuario) {
-		try {
-			return new UsuarioDAO().recuperar(nomeUsuario);
-		} catch (IOException e) {
-			return null;
-		}
-	}
-	
-	public List<Usuario> recuperarTodos() throws IOException {
-		return new UsuarioDAO().recuperarTodos();
-	}
-
 	public String retornarTipoUsuario(JTextField nomeUsuario) throws Exception {
 		
-		Usuario usuario = recuperar(nomeUsuario.getText());
+		Usuario usuario = new UsuarioDAO().recuperar(nomeUsuario.getText());
 		
 		return usuario.getClass().getSimpleName();
 	}
@@ -46,7 +31,7 @@ public class UsuarioController {
 
 		Usuario usuario;
 
-		usuario = recuperar(nomeUsuario.getText());
+		usuario = new UsuarioDAO().recuperar(nomeUsuario.getText());
 
 		if (usuario == null) {
 			throw new UsuarioNaoEncontradoException("USUÁRIO NÃO ENCONTRADO");
@@ -59,7 +44,7 @@ public class UsuarioController {
 
 	public void cadastrarDados(Object tipo, JTextField nomeUsuario, JPasswordField senha) throws Exception {
 
-		if (recuperar(nomeUsuario.getText()) != null) {
+		if (new UsuarioDAO().recuperar(nomeUsuario.getText()) != null) {
 			throw new UsuarioAdicionadoException("USUÁRIO JÁ ADICIONADO");
 		}
 		

@@ -17,7 +17,7 @@ import model.Veiculo;
 
 public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 	
-	private static final String CAMINHO_JSON = "dados/locacoes.json";
+	private static final String CAMINHO_JSON = "dados/json/locacoes.json";
 
 	@Override
 	public Locacao recuperar(Integer id) throws IOException {

@@ -5,9 +5,12 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import service.GeradorPDF;
 
 public class GerenteView extends JFrame implements BotaoListener {
 
@@ -80,6 +83,22 @@ public class GerenteView extends JFrame implements BotaoListener {
 		
 		btnGerenciar.addActionListener(e -> {
 			new GerenciarClientesView().setVisible(true);;
+		});
+		
+		btnRelatorio.addActionListener(e -> {
+			GeradorPDF gerador = new GeradorPDF();
+
+			try {
+				gerador.gerarRelatorioVeiculosLocados();
+				gerador.gerarRelatorioLocacoes();
+				gerador.gerarRelatorioFaturamentos();
+				
+				JOptionPane.showMessageDialog(contentPane, "RELATÓRIOS GERADOS COM SUCESSO NA PASTA \"dados/relatorios\"");
+			}
+			catch (Exception exception) {
+				JOptionPane.showMessageDialog(contentPane, "ERRO AO GERAR RELATÓRIO");
+			}
+			
 		});
 		
 		btnVoltar.addActionListener(e -> {

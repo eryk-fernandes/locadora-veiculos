@@ -65,7 +65,6 @@ public class AtendenteView extends JFrame implements BotaoListener {
 		});
 		
 		btnVerLocacoes.addActionListener(e -> {
-			setVisible(false);
 			new VisualizarLocacoesView().setVisible(true);
 		});
 		

@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controller.VeiculoController;
-import excecoes.TamanhoInvalidoException;
+import exception.TamanhoInvalidoException;
 
 public class CadastrarVeiculoView extends JFrame implements BotaoListener {
 
@@ -108,10 +108,7 @@ public class CadastrarVeiculoView extends JFrame implements BotaoListener {
 					
 				JOptionPane.showMessageDialog(contentPane, "VEÍCULO ADICIONADO COM SUCESSO");
 			}
-			catch (TamanhoInvalidoException exception) {
-				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
-			}
-			catch (IllegalArgumentException exception) {
+			catch (TamanhoInvalidoException | IllegalArgumentException exception) {
 				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
 			}
 			catch (Exception exception) {

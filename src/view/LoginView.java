@@ -13,8 +13,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controller.UsuarioController;
-import excecoes.SenhaIncorretaException;
-import excecoes.UsuarioNaoEncontradoException;
+import exception.SenhaIncorretaException;
+import exception.UsuarioNaoEncontradoException;
 
 public class LoginView extends JFrame implements BotaoListener {
 
@@ -108,10 +108,7 @@ public class LoginView extends JFrame implements BotaoListener {
 					
 				setVisible(false);
 			}
-			catch (UsuarioNaoEncontradoException exception) {
-				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
-			}
-			catch (SenhaIncorretaException exception) {
+			catch (UsuarioNaoEncontradoException | SenhaIncorretaException exception) {
 				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
 			}
 			catch (Exception exception) {

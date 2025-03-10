@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -15,7 +16,7 @@ import model.Pagamento;
 
 public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 	
-	private static final String CAMINHO_JSON = "dados/pagamentos.json";
+	private static final String CAMINHO_JSON = "dados/json/pagamentos.json";
 
 	@Override
 	public Pagamento recuperar(Integer id) throws IOException {
@@ -52,6 +53,8 @@ public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 			pagamentos = gson.fromJson(fr, new TypeToken<ArrayList<Pagamento>>(){}.getType());
 			
 		}
+		
+		Collections.sort(pagamentos);
 		
 		return pagamentos;
 	}

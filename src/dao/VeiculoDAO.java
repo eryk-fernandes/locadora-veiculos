@@ -15,7 +15,7 @@ import model.Veiculo;
 
 public class VeiculoDAO implements Persistencia<Veiculo, String> {
 	
-	private static final String CAMINHO_JSON = "dados/veiculos.json";
+	private static final String CAMINHO_JSON = "dados/json/veiculos.json";
 	
 	@Override
 	public Veiculo recuperar(String placa) throws IOException {

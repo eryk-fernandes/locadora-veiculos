@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class Locacao implements Comparable<Locacao> {
 	
@@ -64,7 +65,14 @@ public class Locacao implements Comparable<Locacao> {
 	
 	@Override
 	public int compareTo(Locacao outro) {
-		return -1 * getId().compareTo(outro.getId());
+		if (ChronoUnit.DAYS.between(retirada, outro.getRetirada()) < 0) {
+			return -1;
+		}
+		if (ChronoUnit.DAYS.between(retirada, outro.getRetirada()) > 0) {
+			return 1;
+		}
+		
+		return 0;
 	}
 	
 }

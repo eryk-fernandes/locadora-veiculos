@@ -13,12 +13,14 @@ import view.SinginView;
 public class Main {
 
 	public static void main(String[] args) {
-		
+
 		new File("dados").mkdirs();
+		new File("dados/json").mkdirs();
+		new File("dados/relatorios").mkdirs();
 		
 		String[] arquivos = {
-				"dados/clientes.json", "dados/veiculos.json", "dados/usuarios.json",
-				"dados/locacoes.json", "dados/pagamentos.json"
+				"dados/json/clientes.json", "dados/json/veiculos.json", "dados/json/usuarios.json",
+				"dados/json/locacoes.json", "dados/json/pagamentos.json"
 		};
 		
 		try {
@@ -26,7 +28,7 @@ public class Main {
 				new FileWriter(arquivo, true).close();
 			}
 			
-			FileReader fr = new FileReader("dados/usuarios.json");
+			FileReader fr = new FileReader("dados/json/usuarios.json");
 			
 			if (fr.read() == -1) {
 				new SinginView().setVisible(true);
@@ -40,6 +42,6 @@ public class Main {
 		catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "ERRO AO EXECUTAR PROGRAMA");
 		}
-		
+
 	}
 }

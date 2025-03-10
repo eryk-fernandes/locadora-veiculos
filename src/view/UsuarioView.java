@@ -14,7 +14,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controller.UsuarioController;
-import excecoes.UsuarioAdicionadoException;
+import exception.UsuarioAdicionadoException;
 
 public class UsuarioView extends JFrame implements BotaoListener {
 
@@ -101,10 +101,7 @@ public class UsuarioView extends JFrame implements BotaoListener {
 					
 				JOptionPane.showMessageDialog(contentPane, "USUÁRIO ADICIONADO COM SUCESSO");
 			}
-			catch (UsuarioAdicionadoException exception) {
-				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
-			}
-			catch (IllegalArgumentException exception) {
+			catch (UsuarioAdicionadoException | IllegalArgumentException exception) {
 				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
 			}
 			catch (Exception exception) {

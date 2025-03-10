@@ -13,7 +13,7 @@ import dao.ClienteDAO;
 import dao.LocacaoDAO;
 import dao.PagamentoDAO;
 import dao.VeiculoDAO;
-import excecoes.VeiculoLocadoException;
+import exception.VeiculoLocadoException;
 import model.Locacao;
 import model.StatusLocacao;
 import model.Veiculo;
@@ -24,6 +24,14 @@ public class LocacaoController {
 	
 	public LocacaoController() {
 
+	}
+	
+	public double calcularCustoLocacao(Locacao locacao) throws IOException {
+		
+ 		long dias = ChronoUnit.DAYS.between(locacao.getRetirada(), locacao.getDevolucao());
+ 		double custoLocacaoDiario = locacao.getVeiculo().calcularCustoLocacaoDiario();
+ 		
+		return custoLocacaoDiario * dias;
 	}
 	
 	public double calcularCustoLocacao(Object locacaoInfo, JTextField pagamento) throws IOException {
@@ -61,20 +69,12 @@ public class LocacaoController {
 		return custoLocacaoDiario * dias;
 	}
 	
-	public double calcularCustoLocacao(Locacao locacao) throws IOException {
-		
- 		long dias = ChronoUnit.DAYS.between(locacao.getRetirada(), locacao.getDevolucao());
- 		double custoLocacaoDiario = locacao.getVeiculo().calcularCustoLocacaoDiario();
- 		
-		return custoLocacaoDiario * dias;
-	}
-	
 	public String[] recuperarStringLocacoes() throws Exception {
 		
 		List<String> locacoes = new ArrayList<>();
 		
 		if (new LocacaoDAO().isVazio()) {
-			locacoes.add("NENHUM CLIENTE ADICIONADO");
+			locacoes.add("NENHUMA LOCAÇÃO ADICIONADA");
 			
 			return locacoes.toArray(new String[locacoes.size()]);
 		}
@@ -89,10 +89,6 @@ public class LocacaoController {
 				
 			locacoes.add(texto.toString());
 		}
-		
-		if (locacoes.size() == 0) {
-			locacoes.add("NENHUMA LOCAÇÃO ADICIONADA");
-		}
 
 		return locacoes.toArray(new String[locacoes.size()]);
 	}
@@ -102,7 +98,7 @@ public class LocacaoController {
 		List<String> locacoes = new ArrayList<>();
 		
 		if (new LocacaoDAO().isVazio()) {
-			locacoes.add("NENHUM CLIENTE ADICIONADO");
+			locacoes.add("NENHUMA LOCAÇÃO ADICIONADA");
 			
 			return locacoes.toArray(new String[locacoes.size()]);
 		}
@@ -121,10 +117,6 @@ public class LocacaoController {
 			}
 		}
 		
-		if (locacoes.size() == 0) {
-			locacoes.add("NENHUMA LOCAÇÃO ADICIONADA");
-		}
-
 		return locacoes.toArray(new String[locacoes.size()]);
 	}
 	
@@ -180,6 +172,66 @@ public class LocacaoController {
 		}
 		
 		return id;
+	}
+	
+	public String[] veiculosLocadosPorMes() throws IOException {
+		
+		List<String> veiculos = new ArrayList<>();
+		
+		if (new LocacaoDAO().isVazio()) {
+			veiculos.add("NENHUM VEÍCULO LOCADO");
+			
+			return veiculos.toArray(new String[veiculos.size()]);
+		}
+		
+		for (Locacao locacao : new LocacaoDAO().recuperarTodos()) {
+			
+			Veiculo veiculo = locacao.getVeiculo();
+				
+			StringBuilder texto = new StringBuilder();
+				
+			texto.append(veiculo.getModelo() + " ");
+			texto.append(veiculo.getAno() + " ");
+			texto.append(veiculo.getPlaca() + " ");
+			texto.append(locacao.getRetirada().format(DateTimeFormatter.ofPattern("MM/yyyy")));
+				
+			veiculos.add(texto.toString());
+		}
+		
+		if (veiculos.size() == 0) {
+			veiculos.add("NENHUM VEÍCULO LOCADO");
+		}
+			
+		return veiculos.toArray(new String[veiculos.size()]);
+	}
+	
+	public String[] locacoesPorMes() throws IOException {
+		
+		List<String> locacoes = new ArrayList<>();
+		
+		if (new LocacaoDAO().isVazio()) {
+			locacoes.add("NENHUMA LOCAÇÃO");
+			
+			return locacoes.toArray(new String[locacoes.size()]);
+		}
+		
+		for (Locacao locacao : new LocacaoDAO().recuperarTodos()) {
+			
+			StringBuilder texto = new StringBuilder();
+			
+			texto.append(locacao.getId() + " ");
+			texto.append(locacao.getCliente().getCpf() + " ");
+			texto.append(locacao.getVeiculo().getPlaca() + " ");
+			texto.append(locacao.getRetirada());
+				
+			locacoes.add(texto.toString());
+		}
+		
+		if (locacoes.size() == 0) {
+			locacoes.add("NENHUMA LOCAÇÃO");
+		}
+			
+		return locacoes.toArray(new String[locacoes.size()]);
 	}
 
 }

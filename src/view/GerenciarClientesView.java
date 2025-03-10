@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controller.ClienteController;
-import excecoes.ProibidoRemoverException;
+import exception.ProibidoRemoverException;
 
 public class GerenciarClientesView extends JFrame implements BotaoListener {
 

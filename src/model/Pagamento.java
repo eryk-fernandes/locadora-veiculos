@@ -1,8 +1,9 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
-public class Pagamento {
+public class Pagamento implements Comparable<Pagamento> {
 
 	private Integer id;
 	private Integer idLocacao;
@@ -60,6 +61,18 @@ public class Pagamento {
 
 	public void setMetodoPagamento(MetodoPagamento metodoPagamento) {
 		this.metodoPagamento = metodoPagamento;
+	}
+
+	@Override
+	public int compareTo(Pagamento outro) {
+		if (ChronoUnit.DAYS.between(dataPagamento, outro.getDataPagamento()) < 0) {
+			return -1;
+		}
+		if (ChronoUnit.DAYS.between(dataPagamento, outro.dataPagamento) > 0) {
+			return 1;
+		}
+		
+		return 0;
 	}
 
 }

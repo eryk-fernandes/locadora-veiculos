@@ -8,7 +8,7 @@ import javax.swing.JTextField;
 import dao.ClienteDAO;
 import dao.LocacaoDAO;
 import dao.PagamentoDAO;
-import excecoes.ProibidoRemoverException;
+import exception.ProibidoRemoverException;
 import model.Cliente;
 import model.Locacao;
 

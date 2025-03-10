@@ -1,4 +1,4 @@
-package excecoes;
+package exception;
 
 public class VeiculoLocadoException extends Exception {
 

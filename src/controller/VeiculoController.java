@@ -7,8 +7,8 @@ import java.util.List;
 import javax.swing.JTextField;
 
 import dao.VeiculoDAO;
-import excecoes.ProibidoRemoverException;
-import excecoes.TamanhoInvalidoException;
+import exception.ProibidoRemoverException;
+import exception.TamanhoInvalidoException;
 import model.Caminhao;
 import model.Carro;
 import model.Moto;
@@ -23,21 +23,17 @@ public class VeiculoController {
 		
 	}
 	
-	public List<Veiculo> recuperarTodos() throws Exception {
-		return new VeiculoDAO().recuperarTodos();
-	}
-	
 	public String[] criarListaPlacas() throws Exception {
 		
 		List<String> veiculos = new ArrayList<>();
 		
 		if (new VeiculoDAO().isVazio()) {
-			veiculos.add("NENHUM CLIENTE ADICIONADO");
+			veiculos.add("NENHUM VEÍCULO ADICIONADO");
 			
 			return veiculos.toArray(new String[veiculos.size()]);
 		}
 
-		for (Veiculo veiculo : recuperarTodos()) {
+		for (Veiculo veiculo : new VeiculoDAO().recuperarTodos()) {
 			String locacao = (veiculo.getStatus() == StatusLocacao.DISPONIVEL) ? "DISPONÍVEL" : "LOCADO";
 				
 			veiculos.add(veiculo.getPlaca() + " - " + locacao);
@@ -55,12 +51,12 @@ public class VeiculoController {
 		List<String> veiculos = new ArrayList<>();
 		
 		if (new VeiculoDAO().isVazio()) {
-			veiculos.add("NENHUM CLIENTE ADICIONADO");
+			veiculos.add("NENHUM VEÍCULO ADICIONADO");
 			
 			return veiculos.toArray(new String[veiculos.size()]);
 		}
 		
-		for (Veiculo veiculo : recuperarTodos()) {
+		for (Veiculo veiculo : new VeiculoDAO().recuperarTodos()) {
 				
 			StringBuilder texto = new StringBuilder();
 				
@@ -100,7 +96,7 @@ public class VeiculoController {
 			throw new IllegalArgumentException("ESSA PLACA JÁ ESTÁ PRESENTE NO SISTEMA");
 		}
 		
-		String modelo = veiculoModelo.getText();
+		String modelo = veiculoModelo.getText().replace(" ", "");
 		
 		if (placa.length() == 0 || modelo.length() == 0 || veiculoAno.getText().length() == 0) {
 			throw new IllegalArgumentException("DIGITE TODOS OS ATRIBUTOS");

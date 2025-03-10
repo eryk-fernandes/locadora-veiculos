@@ -2,8 +2,11 @@ package controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JTextField;
 
@@ -106,6 +109,53 @@ public class PagamentoController {
 		
 		new PagamentoDAO().salvar(pagamento);
 		
+	}
+	
+	public double getFaturamentoMensal(Pagamento pagamento) throws IOException {
+		List<Pagamento> pagamentos = new PagamentoDAO().recuperarTodos();
+		
+		double faturamento = 0.0; 
+		
+		Month mes = pagamento.getDataPagamento().getMonth();
+		
+		for (Pagamento pagamentoAtual : pagamentos) {
+			if (mes.equals(pagamentoAtual.getDataPagamento().getMonth())) {
+				faturamento += pagamentoAtual.getValorPago();
+			}
+		}
+		
+		return faturamento;
+	}
+	
+	public String[] faturamentosPorMes() throws IOException {
+		
+		List<String> pagamentos = new ArrayList<>();
+		
+		if (new PagamentoDAO().isVazio()) {
+			pagamentos.add("NENHUM PAGAMENTO");
+			
+			return pagamentos.toArray(new String[pagamentos.size()]);
+		}
+		
+		for (Pagamento pagamento : new PagamentoDAO().recuperarTodos()) {
+			
+			StringBuilder texto = new StringBuilder();
+			
+			texto.append(pagamento.getId() + " ");
+			texto.append(pagamento.getIdLocacao() + " ");
+			texto.append(String.format("%.2f", pagamento.getValorPago()) + " ");
+			texto.append(pagamento.getMetodoPagamento() + " ");
+			texto.append(pagamento.getDataPagamento() + " ");
+			texto.append(String.format("%.2f", getFaturamentoMensal(pagamento)));
+				
+			pagamentos.add(texto.toString());
+		}
+		
+		if (pagamentos.size() == 0) {
+			pagamentos.add("NENHUM PAGAMENTO");
+		}
+			
+		return pagamentos.toArray(new String[pagamentos.size()]);
 	}
 
 }

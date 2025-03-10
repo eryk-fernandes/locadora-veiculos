@@ -17,8 +17,8 @@ import javax.swing.text.MaskFormatter;
 import controller.ClienteController;
 import controller.LocacaoController;
 import controller.VeiculoController;
-import excecoes.TamanhoInvalidoException;
-import excecoes.VeiculoLocadoException;
+import exception.TamanhoInvalidoException;
+import exception.VeiculoLocadoException;
 
 public class LocacaoView extends JFrame implements BotaoListener {
 
@@ -147,13 +147,7 @@ public class LocacaoView extends JFrame implements BotaoListener {
 					setVisible(false);
 				}
 			}
-			catch (VeiculoLocadoException exception) {
-				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
-			}
-			catch (TamanhoInvalidoException exception) {
-				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
-			}
-			catch (IllegalArgumentException exception) {
+			catch (VeiculoLocadoException | TamanhoInvalidoException | IllegalArgumentException exception) {
 				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
 			}
 			catch (Exception exception) {
