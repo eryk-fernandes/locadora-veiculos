@@ -12,6 +12,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controller.VeiculoController;
+import excecoes.TamanhoInvalidoException;
 
 public class RemoverVeiculoView extends JFrame implements BotaoListener {
 
@@ -89,9 +90,11 @@ public class RemoverVeiculoView extends JFrame implements BotaoListener {
 			catch (IllegalArgumentException exception) {
 				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
 			}
+			catch (TamanhoInvalidoException exception) {
+				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
+			}
 			catch (Exception exception) {
-				JOptionPane.showMessageDialog(contentPane, "ERRO AO REMOVER VEÍCULO"
-						+ "");
+				JOptionPane.showMessageDialog(contentPane, "ERRO AO REMOVER VEÍCULO");
 			}
 		});
 		

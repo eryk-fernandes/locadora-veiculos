@@ -88,7 +88,7 @@ public class UsuarioDAO implements Persistencia<Usuario, String> {
 	}
 
 	@Override
-	public void remover(Usuario usuario) throws IOException {
+	public void remover(String nomeUsuario) throws IOException {
 		List<Usuario> veiculos;
 		
 		List<Usuario> veiculosNovo = new ArrayList<>();
@@ -101,7 +101,7 @@ public class UsuarioDAO implements Persistencia<Usuario, String> {
 		}
 		
 		for (Usuario usuarioAtual : veiculos) {
-			if (!usuario.getNomeUsuario().equals(usuarioAtual.getNomeUsuario())) {
+			if (!nomeUsuario.equals(usuarioAtual.getNomeUsuario())) {
 				veiculosNovo.add(usuarioAtual);
 			}
 		}
@@ -150,6 +150,15 @@ public class UsuarioDAO implements Persistencia<Usuario, String> {
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
+	}
+
+	@Override
+	public boolean isVazio() throws IOException {
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1)
+				return true;
+		}
+		return false;
 	}
 
 }

@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import dao.ClienteDAO;
 import dao.LocacaoDAO;
 import dao.PagamentoDAO;
 import excecoes.ProibidoRemoverException;
-import excecoes.TamanhoInvalidoException;
 import model.Cliente;
 import model.Locacao;
 
@@ -26,55 +24,73 @@ public class ClienteController {
 		return new ClienteDAO().recuperarTodos();
 	}
 	
-	public void salvar() throws IOException {
-		new ClienteDAO().salvar(cliente);
-	}
-	
-	public void remover() throws IOException {
-		new ClienteDAO().remover(cliente);
-	}
-	
-	public void atualizar() throws IOException {
-		new ClienteDAO().atualizar(cliente);
-	}
-	
 	public String[] criarListaCPFs() throws Exception {
 		
 		List<String> clientes = new ArrayList<>();
+		
+		if (new ClienteDAO().isVazio()) {
+			clientes.add("NENHUM CLIENTE ADICIONADO");
+			return clientes.toArray(new String[clientes.size()]);
+		}
 
 		for (Cliente cliente : recuperarTodos()) {
 			clientes.add(cliente.getCpf());
 		}
 			
 		if (clientes.size() == 0) {
-			clientes.add("NENHUM VEÍCULO ADICIONADO");
+			clientes.add("NENHUM CLIENTE ADICIONADO");
 		}
 		
 		return clientes.toArray(new String[clientes.size()]);
 	}
 	
-	public void cadastrarDados(JTextField nome, JTextField cpf, JTextField telefone, JTextField email) throws Exception {
+	public void cadastrarDados(JTextField clienteNome, JTextField clinteCpf, JTextField clienteTelefone, JTextField clienteEmail) throws Exception {
+		
+		String nome = clienteNome.getText();
+		String cpf = clinteCpf.getText().replace("-", "").replace(".", "").replace(" ", "");
+		String telefone = clienteTelefone.getText().replace(" ", "").replace("-", "");
+		String email = clienteEmail.getText();
+		
+		if (nome.length() == 0 || cpf.length() == 0 || telefone.length() == 0 || email.length() == 0) {
+			throw new IllegalArgumentException("DIGITE TODOS OS ATRIBUTOS");
+		}
+		
+		if (!cpf.chars().allMatch(Character::isDigit)) {
+			throw new IllegalArgumentException("CPF NÃO PODE CONTER LETRAS");
+		}
+		
+		if (!telefone.chars().allMatch(Character::isDigit)) {
+			throw new IllegalArgumentException("TELEFONE NÃO PODE CONTER LETRAS");
+		}
+		
+		if (cpf.length() != 11) {
+			throw new IllegalArgumentException("TAMANHO DE CPF INVÁLIDO");
+		}
+		
+		if (new ClienteDAO().recuperar(cpf) != null) {
+			throw new IllegalArgumentException("ESSE CPF JÁ ESTÁ PRESENTE NO SISTEMA");
+		}
 		
 		cliente = new Cliente();
 		
-		if (cpf.getText().replace("-", "").replace(".", "").replace(" ", "").length() != 11) {
-			throw new TamanhoInvalidoException("TAMANHO DE CPF INVÁLIDO");
-		}
+		cliente.setNome(nome);
+		cliente.setCpf(cpf);
+		cliente.setTelefone(telefone);
+		cliente.setEmail(email);
 		
-		cliente.setNome(nome.getText());
-		cliente.setCpf(cpf.getText().replace("-", "").replace(".", "").replace(" ", ""));
-		cliente.setTelefone(telefone.getText().replace("-", "").replace(".", "").replace(" ", ""));
-		cliente.setEmail(email.getText());
-		
-		try {
-			salvar();
-		} catch (IOException e) {
-			throw new IOException("ERRO AO ADICIONAR CLIENTE");
-		}
+		new ClienteDAO().salvar(cliente);
 	}
 	
 	public void editarCliente(Object clienteInfo, Object tipoAtributo, JTextField atributo) throws Exception {
 		Cliente cliente = new ClienteDAO().recuperar(clienteInfo.toString());
+		
+		if (clienteInfo.toString().equals("NENHUM CLIENTE ADICIONADO")) {
+			throw new IllegalArgumentException("NENHUM CLIENTE NO SISTEMA");
+		}
+		
+		if (atributo.getText().length() == 0) {
+			throw new IllegalArgumentException("DIGITE UM ATRIBUTO");
+		}
 		
 		if (tipoAtributo.toString() == "NOME") {
 			cliente.setNome(atributo.getText());
@@ -87,10 +103,6 @@ public class ClienteController {
 		}
 		else {
 			throw new IllegalArgumentException("SELECIONE UM TIPO DE ATRIBUTO");
-		}
-		
-		if (atributo.getText() == "") {
-			throw new IllegalArgumentException("DIGITE UM ATRIBUTO");
 		}
 		
 		new ClienteDAO().atualizar(cliente);
@@ -112,10 +124,16 @@ public class ClienteController {
 		
 		String cpf = clienteInfo.toString();
 		
-		Cliente cliente = new ClienteDAO().recuperar(cpf);
+		if (clienteInfo.toString().equals("NENHUM CLIENTE ADICIONADO")) {
+			throw new IllegalArgumentException("NENHUM CLIENTE NO SISTEMA");
+		}
+		
+		if (new ClienteDAO().recuperar(cpf) == null) {
+			throw new IllegalArgumentException("CLIENTE NÃO EXISTENTE");
+		}
 		
 		if (new LocacaoDAO().recuperarTodos() == null) {
-			new ClienteDAO().remover(cliente);
+			new ClienteDAO().remover(cpf);
 			return;
 		}
 		
@@ -128,13 +146,13 @@ public class ClienteController {
 			}
 			
 			if (cpf.equals(locacao.getCliente().getCpf()) && new PagamentoDAO().recuperar(locacao.getId()) != null) {
-				new ClienteDAO().remover(cliente);
+				new ClienteDAO().remover(cpf);
 				return;
 			}
 		}
 		
 		if (!clientePossuiLocacao) {
-			new ClienteDAO().remover(cliente);
+			new ClienteDAO().remover(cpf);
 		}
 		else {
 			throw new ProibidoRemoverException("NÃO É PERMITIDO REMOVER CLIENTES COM LOCAÇÕES PENDENTES");

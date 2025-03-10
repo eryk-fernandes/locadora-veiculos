@@ -11,7 +11,10 @@ public interface Persistencia<T, K> {
 	
 	void salvar(T t) throws IOException;
 	
-	void remover(T t) throws IOException;
+	void remover(K k) throws IOException;
 	
 	void atualizar(T t) throws IOException;
+	
+	boolean isVazio() throws IOException;
+	
 }

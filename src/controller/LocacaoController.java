@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 
 import dao.ClienteDAO;
 import dao.LocacaoDAO;
+import dao.PagamentoDAO;
 import dao.VeiculoDAO;
 import excecoes.VeiculoLocadoException;
 import model.Locacao;
@@ -52,11 +53,7 @@ public class LocacaoController {
 		
 		String placa = veiculoInfo.toString().split(" ")[0];
 		
-		try {
-			veiculo = new VeiculoDAO().recuperar(placa);
-		} catch (IOException e) {
-			throw new IOException("NÃO FOI POSSÍVEL CALCULAR VALOR DA LOCAÇÃO");
-		}
+		veiculo = new VeiculoDAO().recuperar(placa);
 		
  		long dias = ChronoUnit.DAYS.between(dataRetirada, dataDevolucao);
  		double custoLocacaoDiario = veiculo.calcularCustoLocacaoDiario();
@@ -72,43 +69,25 @@ public class LocacaoController {
 		return custoLocacaoDiario * dias;
 	}
 	
-	public Locacao recuperar(Integer id) throws Exception {
-		return new LocacaoDAO().recuperar(id);
-	}
-	
-	public List<Locacao> recuperarTodos() throws Exception {
-		return new LocacaoDAO().recuperarTodos();
-	}
-	
-	public void salvar() throws Exception {
-		new LocacaoDAO().salvar(locacao);
-	}
-	
-	public void remover() throws Exception {
-		new LocacaoDAO().remover(locacao);
-	}
-	
-	public void atualizar() throws Exception {
-		new LocacaoDAO().atualizar(locacao);
-	}
-	
-	public String[] recuperarStringLocacoes() {
+	public String[] recuperarStringLocacoes() throws Exception {
 		
 		List<String> locacoes = new ArrayList<>();
 		
-		try {
-			for (Locacao locacao : recuperarTodos()) {
-				StringBuilder texto = new StringBuilder();
-				
-				texto.append("ID: " + locacao.getId() + " ");
-				texto.append("CPF: " + locacao.getCliente().getCpf() + " ");
-				texto.append("PLACA: " + locacao.getVeiculo().getPlaca() + " ");
-				texto.append("DATA: " + locacao.getRetirada().format(DateTimeFormatter.ofPattern("MM/yyyy")));
-				
-				locacoes.add(texto.toString());
-			}
-		} catch (Exception e) {
+		if (new LocacaoDAO().isVazio()) {
+			locacoes.add("NENHUM CLIENTE ADICIONADO");
 			
+			return locacoes.toArray(new String[locacoes.size()]);
+		}
+		
+		for (Locacao locacao : new LocacaoDAO().recuperarTodos()) {
+			StringBuilder texto = new StringBuilder();
+				
+			texto.append("ID: " + locacao.getId() + " ");
+			texto.append("CPF: " + locacao.getCliente().getCpf() + " ");
+			texto.append("PLACA: " + locacao.getVeiculo().getPlaca() + " ");
+			texto.append("DATA: " + locacao.getRetirada().format(DateTimeFormatter.ofPattern("MM/yyyy")));
+				
+			locacoes.add(texto.toString());
 		}
 		
 		if (locacoes.size() == 0) {
@@ -118,23 +97,28 @@ public class LocacaoController {
 		return locacoes.toArray(new String[locacoes.size()]);
 	}
 	
-	public String[] recuperarStringLocacoesPendentes() {
+	public String[] recuperarStringLocacoesPendentes() throws Exception {
 		
 		List<String> locacoes = new ArrayList<>();
 		
-		try {
-			for (Locacao locacao : recuperarTodos()) {
+		if (new LocacaoDAO().isVazio()) {
+			locacoes.add("NENHUM CLIENTE ADICIONADO");
+			
+			return locacoes.toArray(new String[locacoes.size()]);
+		}
+		
+		for (Locacao locacao : new LocacaoDAO().recuperarTodos()) {		
+			
+			if (new PagamentoDAO().recuperar(locacao.getId()) == null) {
 				StringBuilder texto = new StringBuilder();
 				
 				texto.append("ID: " + locacao.getId() + " ");
 				texto.append("CPF: " + locacao.getCliente().getCpf() + " ");
 				texto.append("PLACA: " + locacao.getVeiculo().getPlaca() + " ");
 				texto.append("DATA: " + locacao.getRetirada().format(DateTimeFormatter.ofPattern("MM/yyyy")));
-				
+					
 				locacoes.add(texto.toString());
 			}
-		} catch (Exception e) {
-			
 		}
 		
 		if (locacoes.size() == 0) {
@@ -154,42 +138,42 @@ public class LocacaoController {
 			throw new VeiculoLocadoException("NÃO É POSSÍVEL ADICIONAR ESSE VEÍCULO POIS ELE JÁ ESTÁ LOCADO");
 		}
 		
+		LocalDate dataRetirada = LocalDate.parse(retirada.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		LocalDate dataDevolucao = LocalDate.parse(devolucao.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		
+		if (ChronoUnit.DAYS.between(dataRetirada, dataDevolucao) <= 0) {
+			throw new IllegalArgumentException("DATA DE DEVOLUÇÃO DEVE SER MAIOR DO QUE A DATA DE RETIRADA");
+		}
+		
 		locacao = new Locacao();
 		
 		locacao.setId(gerarId());
 		locacao.setCliente(new ClienteDAO().recuperar(cpf));
 		locacao.setVeiculo(new VeiculoDAO().recuperar(placa));
 		
-		try {
-			locacao.setRetirada(LocalDate.parse(retirada.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-			locacao.setDevolucao(LocalDate.parse(devolucao.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-		}
-		catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("DATA INVÁLIDA");
-		}
+		locacao.setRetirada(dataRetirada);
+		locacao.setDevolucao(dataDevolucao);
 
-		try {
-			Veiculo veiculo = new VeiculoDAO().recuperar(placa);
+		Veiculo veiculo = new VeiculoDAO().recuperar(placa);
 			
-			veiculo.setStatus(StatusLocacao.LOCADO);
+		veiculo.setStatus(StatusLocacao.LOCADO);
+		
+		new VeiculoDAO().atualizar(veiculo);
 			
-			new VeiculoDAO().atualizar(veiculo);
-			
-			salvar();
-		} catch (Exception e) {
-			throw new IOException("ERRO AO ADICIONAR O USUÁRIO");
-		}
+		new LocacaoDAO().salvar(locacao);
 	}
 	
 	public int gerarId() throws Exception {
 		
 		int id = 100;
 		
-		if (recuperarTodos() == null) {
+		LocacaoDAO locacaoDAO = new LocacaoDAO();
+		
+		if (locacaoDAO.recuperarTodos() == null) {
 			return id;
 		}
 		
-		for (Locacao locacao : recuperarTodos()) {
+		for (Locacao locacao : locacaoDAO.recuperarTodos()) {
 			if (locacao.getId() == id) {
 				id += 1;
 			}

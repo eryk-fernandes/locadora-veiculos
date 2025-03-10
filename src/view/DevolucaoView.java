@@ -65,14 +65,13 @@ public class DevolucaoView extends JFrame implements BotaoListener {
 		dataPagamento = new JFormattedTextField();
 		dataPagamento.setHorizontalAlignment(SwingConstants.CENTER);
 		dataPagamento.setBounds(81, 201, 138, 20);
-		
-		MaskFormatter mask;
+
 		try {
-			mask = new MaskFormatter("##/##/####");
+			MaskFormatter mask = new MaskFormatter("##/##/####");
 			mask.install(dataPagamento);
 		}
 		catch (ParseException exception) {
-			JOptionPane.showMessageDialog(contentPane, "ERRO");
+			JOptionPane.showMessageDialog(contentPane, "ERRO AO RECEBER DATA");
 		}
 		
 		contentPane.add(dataPagamento);
@@ -81,8 +80,12 @@ public class DevolucaoView extends JFrame implements BotaoListener {
 		locacoes.setBounds(55, 113, 359, 22);
 		contentPane.add(locacoes);
 		
-		for (String locacao : locacaoController.recuperarStringLocacoesPendentes()) {
-			locacoes.addItem(locacao);
+		try {
+			for (String locacao : locacaoController.recuperarStringLocacoesPendentes()) {
+				locacoes.addItem(locacao);
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(contentPane, "ERRO AO RECUPERAR LOCAÇÕES");
 		}
 		
 		metodos = new JComboBox<String>();
@@ -124,11 +127,7 @@ public class DevolucaoView extends JFrame implements BotaoListener {
 				);
 				
 				if (opcao == 0) {
-					pagamentoController.cadastrarDados(
-							locacoes.getSelectedItem(), 
-							metodos.getSelectedItem(),
-							dataPagamento
-					);
+					pagamentoController.cadastrarDados(locacoes.getSelectedItem(), metodos.getSelectedItem(), dataPagamento);
 
 					JOptionPane.showMessageDialog(contentPane, "PAGAMENTO EFETUADO COM SUCESSO");
 					

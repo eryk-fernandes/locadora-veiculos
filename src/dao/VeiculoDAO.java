@@ -91,7 +91,7 @@ public class VeiculoDAO implements Persistencia<Veiculo, String> {
 	}
 
 	@Override
-	public void remover(Veiculo veiculo) throws IOException {
+	public void remover(String placa) throws IOException {
 		List<Veiculo> veiculos;
 		
 		List<Veiculo> veiculosNovo = new ArrayList<>();
@@ -104,7 +104,7 @@ public class VeiculoDAO implements Persistencia<Veiculo, String> {
 		}
 		
 		for (Veiculo veiculoAtual : veiculos) {
-			if (!veiculo.getPlaca().equals(veiculoAtual.getPlaca())) {
+			if (!placa.equals(veiculoAtual.getPlaca())) {
 				veiculosNovo.add(veiculoAtual);
 			}
 		}
@@ -114,7 +114,7 @@ public class VeiculoDAO implements Persistencia<Veiculo, String> {
 		
 		Gson gson = gsonBuilder.create();
 		
-		String json = gson.toJson(veiculos, new TypeToken<ArrayList<Veiculo>>(){}.getType());
+		String json = gson.toJson(veiculosNovo, new TypeToken<ArrayList<Veiculo>>(){}.getType());
 		
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
@@ -155,6 +155,15 @@ public class VeiculoDAO implements Persistencia<Veiculo, String> {
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
+	}
+
+	@Override
+	public boolean isVazio() throws IOException {
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1)
+				return true;
+		}
+		return false;
 	}
 
 }

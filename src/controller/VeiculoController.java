@@ -1,8 +1,7 @@
 package controller;
 
-import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 
 import javax.swing.JTextField;
@@ -28,21 +27,15 @@ public class VeiculoController {
 		return new VeiculoDAO().recuperarTodos();
 	}
 	
-	public void salvar() throws Exception {
-		new VeiculoDAO().salvar(veiculo);
-	}
-	
-	public void remover() throws Exception {
-		new VeiculoDAO().remover(veiculo);
-	}
-	
-	public void atualizar() throws Exception {
-		new VeiculoDAO().atualizar(veiculo);
-	}
-	
 	public String[] criarListaPlacas() throws Exception {
 		
 		List<String> veiculos = new ArrayList<>();
+		
+		if (new VeiculoDAO().isVazio()) {
+			veiculos.add("NENHUM CLIENTE ADICIONADO");
+			
+			return veiculos.toArray(new String[veiculos.size()]);
+		}
 
 		for (Veiculo veiculo : recuperarTodos()) {
 			String locacao = (veiculo.getStatus() == StatusLocacao.DISPONIVEL) ? "DISPONÍVEL" : "LOCADO";
@@ -60,6 +53,12 @@ public class VeiculoController {
 	public String[] criarListaVeiculos() throws Exception {
 		
 		List<String> veiculos = new ArrayList<>();
+		
+		if (new VeiculoDAO().isVazio()) {
+			veiculos.add("NENHUM CLIENTE ADICIONADO");
+			
+			return veiculos.toArray(new String[veiculos.size()]);
+		}
 		
 		for (Veiculo veiculo : recuperarTodos()) {
 				
@@ -80,7 +79,7 @@ public class VeiculoController {
 		return veiculos.toArray(new String[veiculos.size()]);
 	}
 	
-	public void cadastrarDados(Object tipo, JTextField placa, JTextField modelo, JTextField ano) throws Exception {
+	public void cadastrarDados(Object tipo, JTextField veiculoPlaca, JTextField veiculoModelo, JTextField veiculoAno) throws Exception {
 		
 		if (tipo.toString().equals("CARRO")) {
 			veiculo = new Carro();
@@ -95,25 +94,41 @@ public class VeiculoController {
 			throw new IllegalArgumentException("ESCOLHA UMA DAS OPÇÕES DE VEÍCULO");
 		}
 		
-		if (placa.getText().replace("-", "").length() != 7) {
+		String placa = veiculoPlaca.getText().replace("-", "");
+		
+		if (new VeiculoDAO().recuperar(placa) != null) {
+			throw new IllegalArgumentException("ESSA PLACA JÁ ESTÁ PRESENTE NO SISTEMA");
+		}
+		
+		String modelo = veiculoModelo.getText();
+		
+		if (placa.length() == 0 || modelo.length() == 0 || veiculoAno.getText().length() == 0) {
+			throw new IllegalArgumentException("DIGITE TODOS OS ATRIBUTOS");
+		}
+		
+		if (placa.length() != 7) {
 			throw new TamanhoInvalidoException("PLACA INVÁLIDA");
 		}
 		
-		try {
-			veiculo.setPlaca(placa.getText().replace("-", ""));
-			veiculo.setModelo(modelo.getText());
-			veiculo.setAno(Integer.valueOf(ano.getText()));
-			veiculo.setStatus(StatusLocacao.DISPONIVEL);
-		}
-		catch (InputMismatchException e) {
-			throw e;
+		if (veiculoAno.getText().length() != 4) {
+			throw new TamanhoInvalidoException("ANO INVÁLIDO");
 		}
 		
-		try {
-			salvar();
-		} catch (Exception e) {
-			throw new IOException("ERRO AO ADICIONAR O USUÁRIO");
+		int ano = Integer.valueOf(veiculoAno.getText());
+		
+		int anoAtual = LocalDate.now().getYear();
+		
+		if (anoAtual < ano) {
+			throw new IllegalArgumentException("ANO INVÁLIDO");
 		}
+
+		veiculo.setPlaca(placa);
+		veiculo.setModelo(modelo);
+		veiculo.setAno(ano);
+		veiculo.setStatus(StatusLocacao.DISPONIVEL);
+		
+		new VeiculoDAO().salvar(veiculo);
+		
 	}
 	
 	public void removerVeiculo(Object veiculoInfo) throws Exception {
@@ -126,8 +141,8 @@ public class VeiculoController {
 		
 		Veiculo veiculo = new VeiculoDAO().recuperar(placa);
 		
-		if (veiculo.getStatus() == StatusLocacao.DISPONIVEL) {
-			new VeiculoDAO().remover(veiculo);
+		if (veiculo.getStatus().equals(StatusLocacao.DISPONIVEL)) {
+			new VeiculoDAO().remover(placa);
 		}
 		else {
 			throw new ProibidoRemoverException("NÃO É PERMITIDO REMOVER CLIENTES COM LOCAÇÕES PENDENTES");

@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDate;
 
 public class Pagamento {
-	
+
 	private Integer id;
 	private Integer idLocacao;
 	private Double valorPago;

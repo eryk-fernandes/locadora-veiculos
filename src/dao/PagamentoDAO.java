@@ -3,11 +3,12 @@ package dao;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import model.Pagamento;
@@ -19,10 +20,8 @@ public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 	@Override
 	public Pagamento recuperar(Integer id) throws IOException {
 		
-		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1)
-				return null;
-		}
+		if (isVazio())
+			return null;
 		
 		for (Pagamento pagamento : recuperarTodos()) {
 			if (id.equals(pagamento.getId())) {
@@ -36,34 +35,37 @@ public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 	@Override
 	public List<Pagamento> recuperarTodos() throws IOException {
 		
-		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1)
-				return null;
+		if (isVazio()) {
+			return null;
 		}
 
 		List<Pagamento> pagamentos;
 		
 		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			
-			Type tipo = new TypeToken<ArrayList<Pagamento>>(){}.getType();
 
-			pagamentos = new Gson().fromJson(fr, tipo);
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.
+				registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
+				
+			Gson gson = gsonBuilder.create();
+			
+			pagamentos = gson.fromJson(fr, new TypeToken<ArrayList<Pagamento>>(){}.getType());
 			
 		}
 		
 		return pagamentos;
 	}
-
+	
 	@Override
 	public void salvar(Pagamento pagamento) throws IOException {
 		
 		List<Pagamento> pagamentos;
 		
-		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1)
-				pagamentos = new ArrayList<>();
-			else
-				pagamentos = new ArrayList<>(recuperarTodos());
+		if (isVazio()) {
+			pagamentos = new ArrayList<>();
+		}
+		else {
+			pagamentos = new ArrayList<>(recuperarTodos());
 		}
 		
 		for (Pagamento pagamentoAtual : pagamentos) {
@@ -74,7 +76,13 @@ public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 		
 		pagamentos.add(pagamento);
 		
-		String json = new Gson().toJson(pagamentos);
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.
+			registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
+			
+		Gson gson = gsonBuilder.create();
+		
+		String json = gson.toJson(pagamentos);
 		
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
@@ -82,25 +90,31 @@ public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 	}
 
 	@Override
-	public void remover(Pagamento pagamento) throws IOException {
+	public void remover(Integer id) throws IOException {
 		List<Pagamento> pagamentos;
 		
 		List<Pagamento> pagamentosNovo = new ArrayList<>();
 		
-		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1)
-				pagamentos = new ArrayList<>();
-			else
-				pagamentos = new ArrayList<>(recuperarTodos());
+		if (isVazio()) {
+			pagamentos = new ArrayList<>();
+		}
+		else {
+			pagamentos = new ArrayList<>(recuperarTodos());
 		}
 		
 		for (Pagamento clienteAtual : pagamentos) {
-			if (!pagamento.getId().equals(clienteAtual.getId())) {
+			if (!id.equals(clienteAtual.getId())) {
 				pagamentosNovo.add(clienteAtual);
 			}
 		}
 
-		String json = new Gson().toJson(pagamentosNovo);
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.
+			registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
+			
+		Gson gson = gsonBuilder.create();
+		
+		String json = gson.toJson(pagamentosNovo);
 		
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
@@ -113,11 +127,11 @@ public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 		
 		List<Pagamento> pagamentosNovo = new ArrayList<>();
 		
-		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1)
-				pagamentos = new ArrayList<>();
-			else
-				pagamentos = new ArrayList<>(recuperarTodos());
+		if (isVazio()) {
+			pagamentos = new ArrayList<>();
+		}
+		else {
+			pagamentos = new ArrayList<>(recuperarTodos());
 		}
 		
 		for (Pagamento clienteAtual : pagamentos) {
@@ -130,11 +144,26 @@ public class PagamentoDAO implements Persistencia<Pagamento, Integer> {
 
 		}
 
-		String json = new Gson().toJson(pagamentosNovo);
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.
+			registerTypeAdapter(LocalDate.class, new SerializadorLocalDate());
+			
+		Gson gson = gsonBuilder.create();
+		
+		String json = gson.toJson(pagamentosNovo);
 		
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
+	}
+
+	@Override
+	public boolean isVazio() throws IOException {
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1)
+				return true;
+		}
+		return false;
 	}
 
 }

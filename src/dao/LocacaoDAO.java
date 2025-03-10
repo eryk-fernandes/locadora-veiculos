@@ -96,7 +96,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 	}
 
 	@Override
-	public void remover(Locacao locacao) throws IOException {
+	public void remover(Integer id) throws IOException {
 		
 		List<Locacao> locacoes;
 		
@@ -110,7 +110,7 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 		}
 		
 		for (Locacao locacaoAtual : locacoes) {
-			if (!locacao.getId().equals(locacaoAtual.getId())) {
+			if (!id.equals(locacaoAtual.getId())) {
 				locacoesNovo.add(locacaoAtual);
 			}
 		}
@@ -166,6 +166,15 @@ public class LocacaoDAO implements Persistencia<Locacao, Integer> {
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
+	}
+
+	@Override
+	public boolean isVazio() throws IOException {
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1)
+				return true;
+		}
+		return false;
 	}
 	
 }

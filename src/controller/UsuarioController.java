@@ -35,18 +35,6 @@ public class UsuarioController {
 		return new UsuarioDAO().recuperarTodos();
 	}
 
-	public void salvar() throws IOException {
-		new UsuarioDAO().salvar(usuario);
-	}
-
-	public void remover() throws IOException {
-		new UsuarioDAO().remover(usuario);
-	}
-
-	public void atualizar() throws IOException {
-		new UsuarioDAO().atualizar(usuario);
-	}
-
 	public String retornarTipoUsuario(JTextField nomeUsuario) throws Exception {
 		
 		Usuario usuario = recuperar(nomeUsuario.getText());
@@ -91,11 +79,7 @@ public class UsuarioController {
 		usuario.setNomeUsuario(nomeUsuario.getText());
 		usuario.setSenha(String.valueOf(senha.getPassword()));
 
-		try {
-			salvar();
-		} catch (IOException e) {
-			throw new IOException("ERRO AO ADICIONAR O USUÁRIO");
-		}
+		new UsuarioDAO().salvar(usuario);
 	}
 
 }

@@ -20,9 +20,8 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 	@Override
 	public Cliente recuperar(String cpf) throws IOException {
 		
-		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1)
-				return null;
+		if (isVazio()) {
+			return null;
 		}
 		
 		for (Cliente cliente : recuperarTodos()) {
@@ -38,9 +37,8 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 	@Override
 	public List<Cliente> recuperarTodos() throws IOException {
 		
-		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1)
-				return null;
+		if (isVazio()) {
+			return null;
 		}
 
 		List<Cliente> clientes;
@@ -63,11 +61,11 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 		
 		List<Cliente> clientes;
 		
-		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1)
-				clientes = new ArrayList<>();
-			else
-				clientes = new ArrayList<>(recuperarTodos());
+		if (isVazio()) {
+			clientes = new ArrayList<>();
+		}
+		else {
+			clientes = new ArrayList<>(recuperarTodos());
 		}
 		
 		for (Cliente clienteAtual : clientes) {
@@ -87,20 +85,20 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 	}
 
 	@Override
-	public void remover(Cliente cliente) throws IOException {
+	public void remover(String cpf) throws IOException {
 		List<Cliente> clientes;
 		
 		List<Cliente> clientesNovo = new ArrayList<>();
 		
-		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1)
-				clientes = new ArrayList<>();
-			else
-				clientes = new ArrayList<>(recuperarTodos());
+		if (isVazio()) {
+			clientes = new ArrayList<>();
+		}
+		else {
+			clientes = new ArrayList<>(recuperarTodos());
 		}
 		
 		for (Cliente clienteAtual : clientes) {
-			if (!cliente.getCpf().equals(clienteAtual.getCpf())) {
+			if (!cpf.equals(clienteAtual.getCpf())) {
 				clientesNovo.add(clienteAtual);
 			}
 		}
@@ -118,11 +116,11 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 		
 		List<Cliente> clientesNovo = new ArrayList<>();
 		
-		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
-			if (fr.read() == -1)
-				clientes = new ArrayList<>();
-			else
-				clientes = new ArrayList<>(recuperarTodos());
+		if (isVazio()) {
+			clientes = new ArrayList<>();
+		}
+		else {
+			clientes = new ArrayList<>(recuperarTodos());
 		}
 		
 		for (Cliente clienteAtual : clientes) {
@@ -140,6 +138,15 @@ public class ClienteDAO implements Persistencia<Cliente, String> {
 		try (FileWriter fw = new FileWriter(CAMINHO_JSON)) {
 			fw.write(json);
 		}
+	}
+
+	@Override
+	public boolean isVazio() throws IOException {
+		try (FileReader fr = new FileReader(CAMINHO_JSON)) {
+			if (fr.read() == -1)
+				return true;
+		}
+		return false;
 	}
 
 }

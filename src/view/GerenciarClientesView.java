@@ -120,11 +120,15 @@ public class GerenciarClientesView extends JFrame implements BotaoListener {
 					clienteController.editarCliente(clientes.getSelectedItem(), opcoes.getSelectedItem(), atributo);
 				
 					JOptionPane.showMessageDialog(contentPane, "CLIENTE ATUALIZADO COM SUCESSO");
+					
+					setVisible(false);
 				}
 				else if (operacoes.getSelectedItem().toString().equals("REMOVER")) {
 					clienteController.removerCliente(clientes.getSelectedItem());
 				
 					JOptionPane.showMessageDialog(contentPane, "CLIENTE REMOVIDO COM SUCESSO");
+					
+					setVisible(false);
 				}
 				else {
 					JOptionPane.showMessageDialog(contentPane, "SELECIONE UMA OPERAÇÃO");

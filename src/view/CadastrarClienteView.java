@@ -12,7 +12,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controller.ClienteController;
-import excecoes.TamanhoInvalidoException;
 
 public class CadastrarClienteView extends JFrame implements BotaoListener {
 
@@ -105,8 +104,8 @@ public class CadastrarClienteView extends JFrame implements BotaoListener {
 				clienteController.cadastrarDados(nome, cpf, telefone, email);
 					
 				JOptionPane.showMessageDialog(contentPane, "CLIENTE ADICIONADO COM SUCESSO");
-			} 
-			catch (TamanhoInvalidoException exception) {
+			}
+			catch (IllegalArgumentException exception) {
 				JOptionPane.showMessageDialog(contentPane, exception.getMessage());
 			}
 			catch (Exception exception) {

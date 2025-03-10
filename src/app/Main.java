@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 import view.PrincipalView;
 import view.SinginView;
-
+ 
 public class Main {
 
 	public static void main(String[] args) {

@@ -81,15 +81,14 @@ public class LocacaoView extends JFrame implements BotaoListener {
 		dataDevolucao.setBounds(257, 189, 121, 20);
 		contentPane.add(dataDevolucao);
 		
-		MaskFormatter mask;
 		try {
-			mask = new MaskFormatter("##/##/####");
+			MaskFormatter mask = new MaskFormatter("##/##/####");
 			mask.install(dataRetirada);
 			mask = new MaskFormatter("##/##/####");
 			mask.install(dataDevolucao);
 		}
 		catch (ParseException exception) {
-			JOptionPane.showMessageDialog(contentPane, "ERRO");
+			JOptionPane.showMessageDialog(contentPane, "ERRO AO RECEBER DATA");
 		}
 		
 		clientes = new JComboBox<String>();
@@ -144,6 +143,8 @@ public class LocacaoView extends JFrame implements BotaoListener {
 					locacaoController.cadastrarDados(cliente, veiculo, dataRetirada, dataDevolucao);
 					
 					JOptionPane.showMessageDialog(contentPane, "LOCAÇÃO ADICIONADA COM SUCESSO");
+					
+					setVisible(false);
 				}
 			}
 			catch (VeiculoLocadoException exception) {

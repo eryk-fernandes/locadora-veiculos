@@ -6,6 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -40,8 +41,12 @@ public class VisualizarLocacoesView extends JFrame implements BotaoListener {
 		locacoes.setBounds(45, 66, 360, 22);
 		contentPane.add(locacoes);
 		
-		for (String locacao : locacaoController.recuperarStringLocacoes()) {
-			locacoes.addItem(locacao);
+		try {
+			for (String locacao : locacaoController.recuperarStringLocacoes()) {
+				locacoes.addItem(locacao);
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(contentPane, "ERRO AO RECUPERAR LOCAÇÕES");
 		}
 		
 		btnVoltar = new JButton("VOLTAR");

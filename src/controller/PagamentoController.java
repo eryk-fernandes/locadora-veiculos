@@ -24,18 +24,6 @@ public class PagamentoController {
 		
 	}
 	
-	public void salvar() throws Exception {
-		new PagamentoDAO().salvar(pagamento);
-	}
-	
-	public void remover() throws Exception {
-		new PagamentoDAO().remover(pagamento);
-	}
-	
-	public void atualizar() throws Exception {
-		new PagamentoDAO().atualizar(pagamento);
-	}
-	
 	public double resgatarCustoLocacao(int idLocacao) throws IOException {
 		return new LocacaoController().calcularCustoLocacao(new LocacaoDAO().recuperar(idLocacao));
 	}
@@ -68,13 +56,17 @@ public class PagamentoController {
 		return locacao + multa;
 	}
 	
-	public void cadastrarDados(Object locacaoInfo, Object metodo, JTextField dataPagamento) throws Exception {
+	public void cadastrarDados(Object locacaoInfo, Object metodo, JTextField devolucaoDataPagamento) throws Exception {
 		
 		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		
-		Locacao locacao = new LocacaoDAO().recuperar(Integer.valueOf(locacaoInfo.toString().split(" ")[1]));
+		int idLocacao = Integer.valueOf(locacaoInfo.toString().split(" ")[1]);
 		
-		if (metodo.toString().equals("DINHEIRO")) {
+		Locacao locacao = new LocacaoDAO().recuperar(idLocacao);
+		
+		pagamento = new Pagamento();
+		
+		if (metodo.equals("DINHEIRO")) {
 			pagamento.setMetodoPagamento(MetodoPagamento.DINHEIRO);
 		}
 		else if (metodo.toString().equals("BOLETO")) {
@@ -92,25 +84,27 @@ public class PagamentoController {
 		else {
 			throw new IllegalArgumentException("ESCOLHA UM MÉTODO DE PAGAMENTO");
 		}
+		
+		LocalDate dataPagamento = LocalDate.parse(devolucaoDataPagamento.getText(), formatador);
+		LocalDate dataRetirada = locacao.getRetirada();
+		
+		if (ChronoUnit.DAYS.between(dataRetirada, dataPagamento) <= 0) {
+			throw new IllegalArgumentException("DATA DE PAGAMENTO DEVE SER MAIOR DO QUE A DATA DE RETIRADA");
+		}
 
 		pagamento.setId(locacao.getId());
 		pagamento.setIdLocacao(locacao.getId());
-		pagamento.setDataPagamento(LocalDate.parse(dataPagamento.getText(), formatador));
+		pagamento.setDataPagamento(dataPagamento);
+		pagamento.setValorPago(calcularTotal(locacaoInfo, devolucaoDataPagamento));
 		
-		pagamento.setValorPago(calcularTotal(locacaoInfo, dataPagamento));
+		System.out.println(pagamento);
 		
-		try {
-			Veiculo veiculo = new VeiculoDAO().recuperar(locacaoInfo.toString().split(" ")[5]);
-			veiculo.setStatus(StatusLocacao.DISPONIVEL);
+		Veiculo veiculo = locacao.getVeiculo();
+		veiculo.setStatus(StatusLocacao.DISPONIVEL);
 			
-			new VeiculoDAO().atualizar(veiculo);
-			
-			System.out.println("Atualizar veículo");
-			
-			salvar();
-		} catch (Exception e) {
-			throw new IOException("ERRO AO ADICIONAR O USUÁRIO");
-		}
+		new VeiculoDAO().atualizar(veiculo);
+		
+		new PagamentoDAO().salvar(pagamento);
 		
 	}
 
